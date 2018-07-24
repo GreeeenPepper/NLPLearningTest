@@ -70,8 +70,8 @@ with open(filename, 'r', encoding='gb18030', errors='ignore') as f:
     except:
         print('woops')
         print(c.most_common(100))
-
-
+        for (k, v) in c.most_common(100):
+            print('%s%s %s  %d' % ('  ' * (5 - len(k)), k, '*' * int(v / 3), v))
 
 # sentence = "我今天吃了一个苹果，很开心"
 # seglist = jieba.cut(sentence)
