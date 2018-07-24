@@ -1,5 +1,9 @@
 import jieba
 
+
+def getWordsFromSeg():
+    return
+
 filename = 'test2.txt'
 start = 0
 id = 1
@@ -12,11 +16,11 @@ with open(filename, 'r', encoding='gb18030', errors='ignore') as f:
             if lines[0] == '【':
                 mystr = lines.split('】')[1]
                 seg_list = jieba.cut(mystr)
-                print('Type1')
+                #print('Type1')
                 print(str(id) + "  : " + "/ ".join(seg_list))
                 id = id + 1
             if lines[0] == '{':
-                print('Type2')
+                #print('Type2')
                 mystr_1 = lines.split('}')[0].strip('{')
                 mystr_2 = lines.split('}')[1].strip()
                 if mystr_1[0] == '【':
@@ -32,8 +36,8 @@ with open(filename, 'r', encoding='gb18030', errors='ignore') as f:
                     print(str(id) + "  : " + "/ ".join(seg_list_4))
                     print(str(id) + "  : " + "/ ".join(seg_list_5))
                 id = id + 2
-            if lines[0] != '{' or lines[0] != '【':
-                print('Type3')
+            if lines[0] != '{' and lines[0] != '【':
+                #print('Type3')
                 seg_list_3 = jieba.cut(lines)
                 print(str(id) + "  : " + "/ ".join(seg_list_3))
                 id = id + 1
