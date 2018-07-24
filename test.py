@@ -1,4 +1,5 @@
 import jieba
+import jieba.posseg as psg
 from collections import Counter
 
 c = Counter()
@@ -12,6 +13,8 @@ for line in stop_f.readlines():
     stop_words.append(line)
 stop_f.close
 
+jieba.load_userdict('yys.txt')
+
 
 def getWordsFromSeg(segList):
     for x in segList:
@@ -21,7 +24,7 @@ def getWordsFromSeg(segList):
     return
 
 
-filename = 'test2.txt'
+filename = 'test.txt'
 start = 0
 id = 1
 with open(filename, 'r', encoding='gb18030', errors='ignore') as f:
@@ -73,7 +76,4 @@ with open(filename, 'r', encoding='gb18030', errors='ignore') as f:
         for (k, v) in c.most_common(100):
             print('%s%s %s  %d' % ('  ' * (5 - len(k)), k, '*' * int(v / 3), v))
 
-# sentence = "我今天吃了一个苹果，很开心"
-# seglist = jieba.cut(sentence)
-# for words in seglist:
-#     print(words)
+
