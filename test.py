@@ -1,6 +1,7 @@
 import jieba
 import jieba.posseg as psg
 from collections import Counter
+import re
 
 c = Counter()
 
@@ -16,6 +17,7 @@ stop_f.close
 jieba.load_userdict('yys.txt')
 
 
+
 def getWordsFromSeg(segList):
     for x in segList:
         if len(x) > 1:
@@ -24,7 +26,14 @@ def getWordsFromSeg(segList):
     return
 
 
-filename = 'test.txt'
+
+sentecetest = '哪里有勾玉'
+sl = jieba.cut(sentecetest)
+print('/'.join(sl))
+
+
+
+filename = 'test2.txt'
 start = 0
 id = 1
 with open(filename, 'r', encoding='gb18030', errors='ignore') as f:
@@ -76,4 +85,22 @@ with open(filename, 'r', encoding='gb18030', errors='ignore') as f:
         for (k, v) in c.most_common(100):
             print('%s%s %s  %d' % ('  ' * (5 - len(k)), k, '*' * int(v / 3), v))
 
+def SelectKeyWord(keyword):
+    filename = 'test2.txt'
+    start = 0
+    id = 1
+    with open(filename, 'r', encoding='gb18030', errors='ignore') as f:
+        try:
+            while True:
+                lines = f.readline()
+                start = start + 1
+                if start >= 7:
+                    lines = lines.strip()
+                    regex = re.compile('(.*)'+keyword+'(.*)')
+                    a = re.match(regex, lines)
+                    if str(a) != 'None':
+                        print(a)
+        except:
+            return
 
+SelectKeyWord('御魂')
