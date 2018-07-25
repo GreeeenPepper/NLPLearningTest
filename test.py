@@ -1,8 +1,11 @@
 import jieba
+import sys
 import jieba.posseg as psg
 from collections import Counter
 import re
 
+
+count_reask = 0
 c = Counter()
 
 stop_f = open('stopword', "r", encoding='gbk')
@@ -25,21 +28,14 @@ def getWordsFromSeg(segList):
                 c[x] = c[x] + 1
     return
 
-
-
-sentecetest = '哪里有勾玉'
-sl = jieba.cut(sentecetest)
-print('/'.join(sl))
-
-
-
-filename = 'test2.txt'
+filename = 'test4.txt'
 start = 0
 id = 1
 with open(filename, 'r', encoding='gb18030', errors='ignore') as f:
     try:
-        while True:
-            lines = f.readline()
+        # while True:
+        for lines in f.readlines():
+            # lines = f.readline()
             start = start + 1
             if start >= 7:
                 lines = lines.strip()
@@ -48,9 +44,10 @@ with open(filename, 'r', encoding='gb18030', errors='ignore') as f:
                     seg_list = jieba.cut(mystr)
                     getWordsFromSeg(seg_list)
                     #print('Type1')
-                    print(str(id) + "  : " + "/ ".join(seg_list))
+                    #print(str(id) + "  : " + "/ ".join(seg_list))
                     id = id + 1
                 if lines[0] == '{':
+                    count_reask += 1
                     #print('Type2')
                     mystr_1 = lines.split('}')[0].strip('{')
                     mystr_2 = lines.split('}')[1].strip()
@@ -72,7 +69,7 @@ with open(filename, 'r', encoding='gb18030', errors='ignore') as f:
                         getWordsFromSeg(seg_list_5)
                         print(str(id) + "  : " + "/ ".join(seg_list_5))
                     id = id + 2
-                if lines[0] != '{' and lines[0] != '【':
+                if lines[0] != '{' and lines[0] != '【' and lines[0] != 'V':
                     #print('Type3')
                     seg_list_3 = jieba.cut(lines)
                     getWordsFromSeg(seg_list_3)
@@ -86,13 +83,14 @@ with open(filename, 'r', encoding='gb18030', errors='ignore') as f:
             print('%s%s %s  %d' % ('  ' * (5 - len(k)), k, '*' * int(v / 3), v))
 
 def SelectKeyWord(keyword):
-    filename = 'test2.txt'
+    filename = 'test4.txt'
     start = 0
     id = 1
     with open(filename, 'r', encoding='gb18030', errors='ignore') as f:
         try:
-            while True:
-                lines = f.readline()
+            # while True:
+            for lines in f.readlines():
+                # lines = f.readline()
                 start = start + 1
                 if start >= 7:
                     lines = lines.strip()
@@ -101,6 +99,16 @@ def SelectKeyWord(keyword):
                     if str(a) != 'None':
                         print(a)
         except:
+            print('finish')
             return
 
-SelectKeyWord('御魂')
+
+
+
+SelectKeyWord('对面')
+# print(count_reask)
+
+
+
+
+
