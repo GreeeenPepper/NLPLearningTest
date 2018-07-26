@@ -17,7 +17,7 @@ for line in stop_f.readlines():
     stop_words.append(line)
 stop_f.close
 
-jieba.load_userdict('yyskeywordlist.txt')
+#jieba.load_userdict('yyskeywordlist.txt')
 
 filename = 'test4.txt'
 
@@ -87,6 +87,12 @@ def Anaylize():
                 result_file.write(',')
             result_file.write(']')
             result_file.close()
+            return 1
+
+@eel.expose
+def SayHello():
+    print('hello')
+    return 5
 
 @eel.expose
 def SelectKeyWord(keyword):
