@@ -17,7 +17,7 @@ for line in stop_f.readlines():
     stop_words.append(line)
 stop_f.close
 
-jieba.load_userdict('yys.txt')
+jieba.load_userdict('yyskeywordlist.txt')
 
 
 
@@ -28,7 +28,7 @@ def getWordsFromSeg(segList):
                 c[x] = c[x] + 1
     return
 
-filename = 'test4.txt'
+filename = 'test5.txt'
 start = 0
 id = 1
 with open(filename, 'r', encoding='gb18030', errors='ignore') as f:
@@ -78,12 +78,12 @@ with open(filename, 'r', encoding='gb18030', errors='ignore') as f:
                     id = id + 1
     except:
         print('woops')
-        print(c.most_common(100))
-        for (k, v) in c.most_common(100):
+        print(c.most_common(200))
+        for (k, v) in c.most_common(200):
             print('%s%s %s  %d' % ('  ' * (5 - len(k)), k, '*' * int(v / 3), v))
 
 def SelectKeyWord(keyword):
-    filename = 'test4.txt'
+    filename = 'test5.txt'
     start = 0
     id = 1
     with open(filename, 'r', encoding='gb18030', errors='ignore') as f:
@@ -105,7 +105,14 @@ def SelectKeyWord(keyword):
 
 
 
-SelectKeyWord('对面')
+for (k, v) in c.most_common(200):
+    SelectKeyWord(k)
+
+
+
+
+
+
 # print(count_reask)
 
 
