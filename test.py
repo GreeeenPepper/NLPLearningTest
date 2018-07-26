@@ -4,7 +4,6 @@ import jieba.posseg as psg
 from collections import Counter
 import re
 
-
 count_reask = 0
 c = Counter()
 
@@ -74,13 +73,16 @@ with open(filename, 'r', encoding='gb18030', errors='ignore') as f:
                     seg_list_3 = jieba.cut(lines)
                     getWordsFromSeg(seg_list_3)
                     print(str(id) + "  : " + "/ ".join(seg_list_3))
-
                     id = id + 1
     except:
         print('woops')
         print(c.most_common())
+        result_file = open('result_file.json', 'rw')
+        result_file.write('[')
         for (k, v) in c.most_common():
             print('%s%s %s  %d' % ('  ' * (5 - len(k)), k, '*' * int(v / 3), v))
+            result_file.write('{Keyword:'+k+',amonut:'+v+'}')
+            result_file.write(']')
 
 def SelectKeyWord(keyword):
     start = 0
@@ -97,8 +99,9 @@ def SelectKeyWord(keyword):
                     a = re.match(regex, lines)
                     if str(a) != 'None':
                         print(a)
-        except:
             print('finish')
+        except:
+
             return
 
 # print(count_reask)
@@ -114,18 +117,49 @@ def CountRelation(keyword):
                 if start >=7:
                     lines = lines.strip()
                     a = re.match(reg, lines)
-                    print(a)
+                    seg_list_count = []
+                    seg_list_temp = []
                     if str(a) != 'None':
-                        lines_cut = jieba.cut(lines)
-                        for word in lines_cut:
-                            wordlist[word] = wordlist[word] + 1
-        except:
+                        if lines[0] == '【':
+                            mystr = lines.split('】')[1]
+                            seg_list_count = jieba.cut(mystr)
+                        if lines[0] == '{':
+                            mystr_1 = lines.split('}')[0].strip('{')
+                            mystr_2 = lines.split('}')[1].strip()
+                            if mystr_1[0] == '【':
+                                mystr_1_r = mystr_1.split('】')[1]
+                                mystr_2_r = mystr_2.split('】')[1]
+                                seg_list_count = jieba.cut(mystr_1_r)
+                                seg_list_temp = jieba.cut(mystr_2_r)
+                            else:
+                                seg_list_count = jieba.cut(mystr_1)
+                                seg_list_temp = jieba.cut(mystr_2)
+                        if lines[0] != '{' and lines[0] != '【' and lines[0] != 'V':
+                            # print('Type3')
+                            seg_list_count = jieba.cut(lines)
+                        print('yeah！')
+                    for word in seg_list_count:
+                        if word not in stop_words:
+                            print(word)
+                            if word != keyword:
+                                wordlist[word] = wordlist[word] + 1
+                    if seg_list_temp:
+                        for word in seg_list_temp:
+                            if word not in stop_words:
+                                if word != keyword:
+                                    print(word)
+                                    wordlist[word] = wordlist[word] + 1
             print('finish')
             print(wordlist.most_common())
+            for (k, v) in wordlist.most_common():
+                print('%s%s %s  %d' % ('  ' * (5 - len(k)), k, '*' * int(v / 3), v))
+        except:
             return
 
 
 
-CountRelation('式神')
+
+
+
 
 
