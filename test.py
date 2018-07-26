@@ -3,6 +3,7 @@ import sys
 import jieba.posseg as psg
 from collections import Counter
 import re
+import eel
 
 count_reask = 0
 c = Counter()
@@ -18,8 +19,9 @@ stop_f.close
 
 jieba.load_userdict('yyskeywordlist.txt')
 
+filename = 'test4.txt'
 
-
+@eel.expose
 def getWordsFromSeg(segList):
     for x in segList:
         if len(x) > 1:
@@ -27,63 +29,66 @@ def getWordsFromSeg(segList):
                 c[x] = c[x] + 1
     return
 
-filename = 'test4.txt'
-start = 0
-id = 1
-with open(filename, 'r', encoding='gb18030', errors='ignore') as f:
-    try:
-        # while True:
-        for lines in f.readlines():
-            # lines = f.readline()
-            start = start + 1
-            if start >= 7:
-                lines = lines.strip()
-                if lines[0] == '【':
-                    mystr = lines.split('】')[1]
-                    seg_list = jieba.cut(mystr)
-                    getWordsFromSeg(seg_list)
-                    #print('Type1')
-                    #print(str(id) + "  : " + "/ ".join(seg_list))
-                    id = id + 1
-                if lines[0] == '{':
-                    count_reask += 1
-                    #print('Type2')
-                    mystr_1 = lines.split('}')[0].strip('{')
-                    mystr_2 = lines.split('}')[1].strip()
-                    if mystr_1[0] == '【':
-                        mystr_1_r = mystr_1.split('】')[1]
-                        mystr_2_r = mystr_2.split('】')[1]
-                        seg_list_6 = jieba.cut(mystr_1_r)
-                        seg_list_7 = jieba.cut(mystr_2_r)
-                        getWordsFromSeg(seg_list_6)
-                        print(str(id) + "  : " + "/ ".join(seg_list_6))
-                        getWordsFromSeg(seg_list_7)
-                        print(str(id) + "  : " + "/ ".join(seg_list_7))
+@eel.expose
+def Anaylize():
+    start = 0
+    id = 1
+    with open(filename, 'r', encoding='gb18030', errors='ignore') as f:
+        try:
+            # while True:
+            for lines in f.readlines():
+                # lines = f.readline()
+                start = start + 1
+                if start >= 7:
+                    lines = lines.strip()
+                    if lines[0] == '【':
+                        mystr = lines.split('】')[1]
+                        seg_list = jieba.cut(mystr)
+                        getWordsFromSeg(seg_list)
+                        #print('Type1')
+                        print(str(id) + "  : " + "/ ".join(seg_list))
+                        id = id + 1
+                    if lines[0] == '{':
+                        #print('Type2')
+                        mystr_1 = lines.split('}')[0].strip('{')
+                        mystr_2 = lines.split('}')[1].strip()
+                        if mystr_1[0] == '【':
+                            mystr_1_r = mystr_1.split('】')[1]
+                            mystr_2_r = mystr_2.split('】')[1]
+                            seg_list_6 = jieba.cut(mystr_1_r)
+                            seg_list_7 = jieba.cut(mystr_2_r)
+                            getWordsFromSeg(seg_list_6)
+                            print(str(id) + "  : " + "/ ".join(seg_list_6))
+                            getWordsFromSeg(seg_list_7)
+                            print(str(id) + "  : " + "/ ".join(seg_list_7))
 
-                    else:
-                        seg_list_4 = jieba.cut(mystr_1)
-                        seg_list_5 = jieba.cut(mystr_2)
-                        getWordsFromSeg(seg_list_4)
-                        print(str(id) + "  : " + "/ ".join(seg_list_4))
-                        getWordsFromSeg(seg_list_5)
-                        print(str(id) + "  : " + "/ ".join(seg_list_5))
-                    id = id + 2
-                if lines[0] != '{' and lines[0] != '【' and lines[0] != 'V':
-                    #print('Type3')
-                    seg_list_3 = jieba.cut(lines)
-                    getWordsFromSeg(seg_list_3)
-                    print(str(id) + "  : " + "/ ".join(seg_list_3))
-                    id = id + 1
-    except:
-        print('woops')
-        print(c.most_common())
-        result_file = open('result_file.json', 'rw')
-        result_file.write('[')
-        for (k, v) in c.most_common():
-            print('%s%s %s  %d' % ('  ' * (5 - len(k)), k, '*' * int(v / 3), v))
-            result_file.write('{Keyword:'+k+',amonut:'+v+'}')
+                        else:
+                            seg_list_4 = jieba.cut(mystr_1)
+                            seg_list_5 = jieba.cut(mystr_2)
+                            getWordsFromSeg(seg_list_4)
+                            print(str(id) + "  : " + "/ ".join(seg_list_4))
+                            getWordsFromSeg(seg_list_5)
+                            print(str(id) + "  : " + "/ ".join(seg_list_5))
+                        id = id + 2
+                    if lines[0] != '{' and lines[0] != '【' and lines[0] != 'V':
+                        #print('Type3')
+                        seg_list_3 = jieba.cut(lines)
+                        getWordsFromSeg(seg_list_3)
+                        print(str(id) + "  : " + "/ ".join(seg_list_3))
+                        id = id + 1
+        except:
+            print('woops')
+            print(c.most_common())
+            result_file = open('result_file.json', 'w', encoding='utf-8', errors='ignore')
+            result_file.write('[')
+            for (k, v) in c.most_common():
+                print('%s%s %s  %d' % ('  ' * (5 - len(k)), k, '*' * int(v / 3), v))
+                result_file.write('{\"Keyword\":\"'+k+'\",\"amount\":'+str(v)+'}')
+                result_file.write(',')
             result_file.write(']')
+            result_file.close()
 
+@eel.expose
 def SelectKeyWord(keyword):
     start = 0
     id = 1
@@ -151,15 +156,23 @@ def CountRelation(keyword):
                                     wordlist[word] = wordlist[word] + 1
             print('finish')
             print(wordlist.most_common())
+            filename_c = 'CountRelation_'+keyword+'.json'
+            result_file = open(filename_c, 'w', encoding='utf-8', errors='ignore')
+            result_file.write('[')
             for (k, v) in wordlist.most_common():
                 print('%s%s %s  %d' % ('  ' * (5 - len(k)), k, '*' * int(v / 3), v))
+                result_file.write('{\"Keyword\":\"' + k + '\",\"amount\":' + str(v) + '}')
+                result_file.write(',')
+            result_file.write(']')
+            result_file.close()
         except:
             return
 
 
 
 
-
+eel.init('web')
+eel.start('test.html')
 
 
 
