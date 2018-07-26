@@ -28,7 +28,7 @@ def getWordsFromSeg(segList):
                 c[x] = c[x] + 1
     return
 
-filename = 'test5.txt'
+filename = 'test4.txt'
 start = 0
 id = 1
 with open(filename, 'r', encoding='gb18030', errors='ignore') as f:
@@ -78,12 +78,11 @@ with open(filename, 'r', encoding='gb18030', errors='ignore') as f:
                     id = id + 1
     except:
         print('woops')
-        print(c.most_common(200))
-        for (k, v) in c.most_common(200):
+        print(c.most_common())
+        for (k, v) in c.most_common():
             print('%s%s %s  %d' % ('  ' * (5 - len(k)), k, '*' * int(v / 3), v))
 
 def SelectKeyWord(keyword):
-    filename = 'test5.txt'
     start = 0
     id = 1
     with open(filename, 'r', encoding='gb18030', errors='ignore') as f:
@@ -102,20 +101,31 @@ def SelectKeyWord(keyword):
             print('finish')
             return
 
-
-
-
-for (k, v) in c.most_common(200):
-    SelectKeyWord(k)
-
-
-
-
-
-
 # print(count_reask)
 
+def CountRelation(keyword):
+    start = 0
+    wordlist = Counter()
+    reg = re.compile('(.*)' + keyword + '(.*)')
+    with open (filename, 'r', encoding='gb18030', errors='ignore') as fff:
+        try:
+            for lines in fff.readlines():
+                start = start + 1
+                if start >=7:
+                    lines = lines.strip()
+                    a = re.match(reg, lines)
+                    print(a)
+                    if str(a) != 'None':
+                        lines_cut = jieba.cut(lines)
+                        for word in lines_cut:
+                            wordlist[word] = wordlist[word] + 1
+        except:
+            print('finish')
+            print(wordlist.most_common())
+            return
 
 
+
+CountRelation('式神')
 
 
