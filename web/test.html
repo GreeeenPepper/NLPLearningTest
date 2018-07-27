@@ -4,20 +4,40 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>无回复问题分词统计工具</title>
 
-    <link href="web/css/bootstrap.min.css" rel="stylesheet">
-    <link href="web/css/bootstrap-theme.min.css" rel="stylesheet">
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/bootstrap-theme.min.css" rel="stylesheet">
 </head>
 <body>
-
-
-
-
-
+<div class="container">
+    <div class="page-header">
+        <h1 style="font-weight:lighter;font-family:'微软雅黑'">
+            无回复问题分词统计
+            <small>Powered By Bellong.WYZ</small>
+        </h1>
+    </div>
+    <div id="Chart_1" style="width:1200px;height:600px"></div>
+    <div style="margin:auto;text-align:center">
+        <div class="btn-group" style="margin:20px">
+            <button id="btn1" type="button" style="outline:none" class="btn btn-success btn-lg hidden" onclick="FirstFifteenWords()">出现次数最高15项</button>
+        </div>
+        <div class="btn-group" style="margin:20px">
+            <button id="btn2" type="button" style="outline:none" class="btn btn-primary btn-lg hidden" onclick="PreviousFifteenWords()">前15项</button>
+        </div>
+        <div class="btn-group" style="margin:20px">
+            <button id="btn3" type="button" style="outline:none" class="btn btn-primary btn-lg hidden" onclick="NextFifteenWords()">后15项</button>
+        </div>
+        <div class="btn-group" style="margin:20px">
+            <button id="btn4" type="button" style="outline:none" class="btn btn-success btn-lg hidden" onclick="LastFifteenWords()">出现次数最少15项</button>
+        </div>
+    </div>
+</div>
 
 </body>
 <script type="text/javascript" src="/eel.js"></script>
-<script type="text/javascript" src="web/js/bootstrap.min.js"></script>
-<script type="text/javascript" src="web/js/echarts.min.js"></script>
+<script type="text/javascript" src="js/test.js"></script>
+<script type="text/javascript" src="js/jquery-3.3.1.min.js"></script>
+<script type="text/javascript" src="js/bootstrap.min.js"></script>
+<script type="text/javascript" src="js/echarts.min.js"></script>
 </html>

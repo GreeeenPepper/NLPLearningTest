@@ -4,6 +4,7 @@ import jieba.posseg as psg
 from collections import Counter
 import re
 import eel
+import math
 
 count_reask = 0
 c = Counter()
@@ -17,9 +18,9 @@ for line in stop_f.readlines():
     stop_words.append(line)
 stop_f.close
 
-#jieba.load_userdict('yyskeywordlist.txt')
+jieba.load_userdict('yyskeywordlist.txt')
 
-filename = 'test4.txt'
+my_filename = '20180727.txt'
 
 @eel.expose
 def getWordsFromSeg(segList):
@@ -30,7 +31,8 @@ def getWordsFromSeg(segList):
     return
 
 @eel.expose
-def Anaylize():
+def Anaylize(filename):
+    c.clear()
     start = 0
     id = 1
     with open(filename, 'r', encoding='gb18030', errors='ignore') as f:
@@ -79,7 +81,7 @@ def Anaylize():
         except:
             print('woops')
             print(c.most_common())
-            result_file = open('result_file.json', 'w', encoding='utf-8', errors='ignore')
+            result_file = open('web/result_file.json', 'w', encoding='utf-8', errors='ignore')
             result_file.write('[')
             for (k, v) in c.most_common():
                 print('%s%s %s  %d' % ('  ' * (5 - len(k)), k, '*' * int(v / 3), v))
@@ -87,7 +89,7 @@ def Anaylize():
                 result_file.write(',')
             result_file.write(']')
             result_file.close()
-            return 1
+            return c.most_common()
 
 @eel.expose
 def SayHello():
@@ -95,7 +97,7 @@ def SayHello():
     return 5
 
 @eel.expose
-def SelectKeyWord(keyword):
+def SelectKeyWord(keyword, filename):
     start = 0
     id = 1
     with open(filename, 'r', encoding='gb18030', errors='ignore') as f:
@@ -117,7 +119,7 @@ def SelectKeyWord(keyword):
 
 # print(count_reask)
 
-def CountRelation(keyword):
+def CountRelation(keyword, filename):
     start = 0
     wordlist = Counter()
     reg = re.compile('(.*)' + keyword + '(.*)')
@@ -179,6 +181,5 @@ def CountRelation(keyword):
 
 eel.init('web')
 eel.start('test.html')
-
 
 
