@@ -122,6 +122,7 @@ def SelectKeyWord(keyword, filename):
 
 # print(count_reask)
 
+@eel.expose
 def CountRelation(keyword, filename):
     start = 0
     wordlist = Counter()
