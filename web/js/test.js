@@ -119,6 +119,119 @@ var vm = new Vue({
             resultList:resultList
         }
 })
+function GetRelation(result){
+    var myChart_2 = echarts.init(document.getElementById('Chart_2'));
+    json = {
+        "nodes": [
+
+            {
+                "color": "#c71969",
+                "label": "underscore",
+                "attributes": {},
+                "y": -734.4221,
+                "x": -75.53079,
+                "id": "underscore",
+                "size": 100.0
+            },
+            {
+                "color": "#c71969",
+                "label": "faye",
+                "attributes": {},
+                "y": 624.50604,
+                "x": -818.97516,
+                "id": "faye",
+                "size": 0.67816025
+            },
+            {
+                "color": "#c71919",
+                "label": "socket.io",
+                "attributes": {},
+                "y": 120.37976,
+                "x": -710.59204,
+                "id": "socket.io",
+                "size": 19.818306
+            },
+        ],
+        "edges":[
+            {
+                "sourceID":"underscore",
+                "attributes":{},
+                "targetID":"faye",
+                "size":1
+            },
+            {
+                "sourceID":"underscore",
+                "attributes":{},
+                "targetID":"socket.io",
+                "size":1
+            },
+            {
+                "sourceID":"socket.io",
+                "attributes":{},
+                "targetID":"underscore",
+                "size":1
+            },
+            {
+                "sourceID":"socket.io",
+                "attributes":{},
+                "targetID":"faye",
+                "size":1
+            }
+        ]
+    };
+    myChart_2.setOption(option = {
+        title: {
+            text: 'NPM Dependencies'
+        },
+        animationDurationUpdate: 1500,
+        animationEasingUpdate: 'quinticInOut',
+        series : [
+            {
+                type: 'graph',
+                layout: 'none',
+                // progressiveThreshold: 700,
+                data: json.nodes.map(function (node) {
+                    return {
+                        x: node.x,
+                        y: node.y,
+                        id: node.id,
+                        name: node.label,
+                        symbolSize: node.size,
+                        itemStyle: {
+                            normal: {
+                                color: node.color
+                            }
+                        }
+                    };
+                }),
+                edges: json.edges.map(function (edge) {
+                    return {
+                        source: edge.sourceID,
+                        target: edge.targetID
+                    };
+                }),
+                label: {
+                    emphasis: {
+                        position: 'right',
+                        show: true
+                    }
+                },
+                roam: true,
+                focusNodeAdjacency: true,
+                lineStyle: {
+                    normal: {
+                        width: 0.5,
+                        curveness: 0.3,
+                        opacity: 0.7
+                    }
+                }
+            }
+        ]
+    }, true);
+    myChart_2.on('click', function (params) {
+        console.log(params)
+    });
+}
 function ListOutSentences(result){
     var length = resultList.length;
     for(var a = 0;a<length;a++){

@@ -1,0 +1,52 @@
+{
+  "nodes": [
+
+    {
+      "color": "#c71969",
+      "label": "underscore",
+      "attributes": {},
+      "y": -734.4221,
+      "x": -75.53079,
+      "id": "underscore",
+      "size": 100.0
+    },
+    {
+      "color": "#c71969",
+      "label": "faye",
+      "attributes": {},
+      "y": 624.50604,
+      "x": -818.97516,
+      "id": "faye",
+      "size": 0.67816025
+    },
+    {
+      "color": "#c71919",
+      "label": "socket.io",
+      "attributes": {},
+      "y": 120.37976,
+      "x": -710.59204,
+      "id": "socket.io",
+      "size": 19.818306
+    },
+  ],
+  "edges":[
+    {
+      "sourceID":"underscore",
+      "attributes":{},
+      "targetID":"faye",
+      "size":1
+    },
+    {
+      "sourceID":"underscore",
+      "attributes":{},
+      "targetID":"socket.io",
+      "size":1
+    },
+    {
+      "sourceID":"socket.io",
+      "attributes":{},
+      "targetID":"faye",
+      "size":1
+    }
+  ]
+}

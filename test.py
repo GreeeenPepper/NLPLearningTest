@@ -177,13 +177,16 @@ def CountRelation(keyword, filename):
                 result_file.write(',')
             result_file.write(']')
             result_file.close()
+            return wordlist.most_common()
         except:
-            return
+            return wordlist.most_common()
 
 
 
 
 eel.init('web')
 eel.start('test.html')
+
+
 
 
