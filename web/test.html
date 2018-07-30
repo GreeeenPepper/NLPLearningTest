@@ -20,30 +20,38 @@
     <div id="Chart_1" style="width:1200px;height:600px"></div>
     <div style="margin:auto;text-align:center">
         <div class="btn-group" style="margin:20px">
-            <button id="btn1" type="button" style="outline:none" class="btn btn-success btn-lg hidden" onclick="FirstFifteenWords()">出现次数最高15项</button>
+            <button id="btn1" type="button" style="outline:none" class="btn btn-success btn-lg hidden"
+                    onclick="FirstFifteenWords()">出现次数最高15项
+            </button>
         </div>
         <div class="btn-group" style="margin:20px">
-            <button id="btn2" type="button" style="outline:none" class="btn btn-primary btn-lg hidden" onclick="PreviousFifteenWords()">前15项</button>
+            <button id="btn2" type="button" style="outline:none" class="btn btn-primary btn-lg hidden"
+                    onclick="PreviousFifteenWords()">前15项
+            </button>
         </div>
         <div class="btn-group" style="margin:20px">
-            <button id="btn3" type="button" style="outline:none" class="btn btn-primary btn-lg hidden" onclick="NextFifteenWords()">后15项</button>
+            <button id="btn3" type="button" style="outline:none" class="btn btn-primary btn-lg hidden"
+                    onclick="NextFifteenWords()">后15项
+            </button>
         </div>
         <div class="btn-group" style="margin:20px">
-            <button id="btn4" type="button" style="outline:none" class="btn btn-success btn-lg hidden" onclick="LastFifteenWords()">出现次数最少15项</button>
+            <button id="btn4" type="button" style="outline:none" class="btn btn-success btn-lg hidden"
+                    onclick="LastFifteenWords()">出现次数最少15项
+            </button>
         </div>
     </div>
-
-
-
-
-
-
+    <div style="text-align:center" id="ResultList" >
+        <ul class="list-group">
+            <li class="list-group-item"  v-for="sen in resultList">{{sen.sentence}}</li>
+        </ul>
+    </div>
 </div>
 
 </body>
 <script type="text/javascript" src="/eel.js"></script>
-<script type="text/javascript" src="js/test.js"></script>
 <script type="text/javascript" src="js/jquery-3.3.1.min.js"></script>
 <script type="text/javascript" src="js/bootstrap.min.js"></script>
+<script type="text/javascript" src="js/vue.min.js"></script>
 <script type="text/javascript" src="js/echarts.min.js"></script>
+<script type="text/javascript" src="js/test.js"></script>
 </html>

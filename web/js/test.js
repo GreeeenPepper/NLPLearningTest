@@ -112,11 +112,20 @@ function CreateAnaylizeChart(result){
     $('#btn3').removeClass('hidden');
     $('#btn4').removeClass('hidden');
 }
+var resultList = [{sentence:'test1'},{sentence:'test2'}];
+var vm = new Vue({
+        el:'#ResultList',
+        data:{
+            resultList:resultList
+        }
+})
 function ListOutSentences(result){
-    var Listresult = [];
-
+    var length = resultList.length;
+    for(var a = 0;a<length;a++){
+        resultList.pop();
+    }
     for(var sen in result){
-        console.log(result[sen].split('match=\'')[1].split('\'')[0])
+        resultList.push({'sentence':result[sen].split('match=\'')[1].split('\'')[0]});
     }
 }
 function FirstFifteenWords(){
