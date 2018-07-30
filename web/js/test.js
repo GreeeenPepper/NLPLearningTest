@@ -3,6 +3,7 @@ var myChart = null;
 var currentStart = 0;
 var result_Axis = [];
 var result_amount = [];
+var filename = '20180730.txt';
 function CreateAnaylizeChart(result){
     localestore_result = result;
     myChart = echarts.init(document.getElementById('Chart_1'));
@@ -98,6 +99,7 @@ function CreateAnaylizeChart(result){
     var zoomSize = 6;
     myChart.on('click', function (params) {
     console.log(result_Axis[params.dataIndex]);
+    eel.SelectKeyWord(result_Axis[params.dataIndex],filename)(ListOutSentences);
 //    myChart.dispatchAction({
 //        type: 'dataZoom',
 //        startValue: result_Axis[Math.max(params.dataIndex - zoomSize / 2, 0)],
@@ -109,6 +111,13 @@ function CreateAnaylizeChart(result){
     $('#btn2').removeClass('hidden');
     $('#btn3').removeClass('hidden');
     $('#btn4').removeClass('hidden');
+}
+function ListOutSentences(result){
+    var Listresult = [];
+
+    for(var sen in result){
+        console.log(result[sen].split('match=\'')[1].split('\'')[0])
+    }
 }
 function FirstFifteenWords(){
     currentStart = 0;

@@ -20,7 +20,7 @@ stop_f.close
 
 jieba.load_userdict('yyskeywordlist.txt')
 
-my_filename = '20180727.txt'
+my_filename = '20180730.txt'
 
 @eel.expose
 def getWordsFromSeg(segList):
@@ -98,6 +98,7 @@ def SayHello():
 
 @eel.expose
 def SelectKeyWord(keyword, filename):
+    result = []
     start = 0
     id = 1
     with open(filename, 'r', encoding='gb18030', errors='ignore') as f:
@@ -112,10 +113,12 @@ def SelectKeyWord(keyword, filename):
                     a = re.match(regex, lines)
                     if str(a) != 'None':
                         print(a)
+                        result.append(str(a))
             print('finish')
+            print(result)
+            return result
         except:
-
-            return
+            return result
 
 # print(count_reask)
 
