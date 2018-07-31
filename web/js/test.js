@@ -100,6 +100,7 @@ function CreateAnaylizeChart(result){
     myChart.on('click', function (params) {
     console.log(result_Axis[params.dataIndex]);
     eel.SelectKeyWord(result_Axis[params.dataIndex],filename)(ListOutSentences);
+    eel.CountRelation(result_Axis[params.dataIndex],filename)(GetRelation);
 //    myChart.dispatchAction({
 //        type: 'dataZoom',
 //        startValue: result_Axis[Math.max(params.dataIndex - zoomSize / 2, 0)],
@@ -120,6 +121,7 @@ var vm = new Vue({
         }
 })
 function GetRelation(result){
+    console.log(result);
     var myChart_2 = echarts.init(document.getElementById('Chart_2'));
     json = {
         "nodes": [

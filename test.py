@@ -20,7 +20,7 @@ stop_f.close
 
 jieba.load_userdict('yyskeywordlist.txt')
 
-my_filename = '20180730.txt'
+my_filename = '20180731.txt'
 
 @eel.expose
 def getWordsFromSeg(segList):
@@ -126,6 +126,7 @@ def SelectKeyWord(keyword, filename):
 def CountRelation(keyword, filename):
     start = 0
     wordlist = Counter()
+    wordlist[keyword] = 0
     reg = re.compile('(.*)' + keyword + '(.*)')
     with open (filename, 'r', encoding='gb18030', errors='ignore') as fff:
         try:
