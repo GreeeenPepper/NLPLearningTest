@@ -4,103 +4,107 @@ var currentStart = 0;
 var result_Axis = [];
 var result_amount = [];
 var filename = '20180730.txt';
-function CreateAnaylizeChart(result){
+
+function CreateAnaylizeChart(result) {
     localestore_result = result;
     myChart = echarts.init(document.getElementById('Chart_1'));
     result_Axis = [];
     result_amount = [];
-    for(var WordCut in localestore_result.slice(0,15)){
+    for (var WordCut in localestore_result.slice(0, 15)) {
         result_Axis.push(localestore_result[WordCut][0]);
         result_amount.push(localestore_result[WordCut][1]);
     }
-    var yMax = Math.ceil(result_amount[0]*1.2);
+    var yMax = Math.ceil(result_amount[0] * 1.2);
     var dataShadow = [];
-    for(var i=0;i<15;i++){
+    for (var i = 0; i < 15; i++) {
         dataShadow.push(yMax);
     }
     option = {
-    title: {
-        text: 'NLP处理后该次无回复问题txt分词统计结果',
-        subtext: '每次显示15个'
-    },
-    xAxis: {
-        data: result_Axis,
-        axisLabel: {
-            inside: true,
-            textStyle: {
-                color: '#fff'
-            }
+        title: {
+            text: 'NLP处理后该次无回复问题txt分词统计结果',
+            subtext: '每次显示15个'
         },
-        axisTick: {
-            show: false
-        },
-        axisLine: {
-            show: false
-        },
-        z: 10
-    },
-    yAxis: {
-        axisLine: {
-            show: false
-        },
-        axisTick: {
-            show: false
-        },
-        axisLabel: {
-            textStyle: {
-                color: '#999'
-            }
-        }
-    },
-    dataZoom: [
-        {
-            type: 'inside'
-        }
-    ],
-    series: [
-        { // For shadow
-            type: 'bar',
-            itemStyle: {
-                normal: {color: 'rgba(0,0,0,0.05)'}
-            },
-            barGap:'-100%',
-            barCategoryGap:'40%',
-            data: dataShadow,
-            animation: false
-        },
-        {
-            type: 'bar',
-            itemStyle: {
-                normal: {
-                    color: new echarts.graphic.LinearGradient(
-                        0, 0, 0, 1,
-                        [
-                            {offset: 0, color: '#83bff6'},
-                            {offset: 0.5, color: '#188df0'},
-                            {offset: 1, color: '#188df0'}
-                        ]
-                    )
-                },
-                emphasis: {
-                    color: new echarts.graphic.LinearGradient(
-                        0, 0, 0, 1,
-                        [
-                            {offset: 0, color: '#2378f7'},
-                            {offset: 0.7, color: '#2378f7'},
-                            {offset: 1, color: '#83bff6'}
-                        ]
-                    )
+        xAxis: {
+            data: result_Axis,
+            axisLabel: {
+                inside: true,
+                textStyle: {
+                    color: '#fff'
                 }
             },
-            data: result_amount
-        }
-    ]
-};
+            axisTick: {
+                show: false
+            },
+            axisLine: {
+                show: false
+            },
+            z: 10
+        },
+        yAxis: {
+            axisLine: {
+                show: false
+            },
+            axisTick: {
+                show: false
+            },
+            axisLabel: {
+                textStyle: {
+                    color: '#999'
+                }
+            }
+        },
+        dataZoom: [
+            {
+                type: 'inside'
+            }
+        ],
+        series: [
+            { // For shadow
+                type: 'bar',
+                itemStyle: {
+                    normal: {color: 'rgba(0,0,0,0.05)'}
+                },
+                barGap: '-100%',
+                barCategoryGap: '40%',
+                data: dataShadow,
+                animation: false
+            },
+            {
+                type: 'bar',
+                itemStyle: {
+                    normal: {
+                        color: new echarts.graphic.LinearGradient(
+                            0, 0, 0, 1,
+                            [
+                                {offset: 0, color: '#83bff6'},
+                                {offset: 0.5, color: '#188df0'},
+                                {offset: 1, color: '#188df0'}
+                            ]
+                        )
+                    },
+                    emphasis: {
+                        color: new echarts.graphic.LinearGradient(
+                            0, 0, 0, 1,
+                            [
+                                {offset: 0, color: '#2378f7'},
+                                {offset: 0.7, color: '#2378f7'},
+                                {offset: 1, color: '#83bff6'}
+                            ]
+                        )
+                    }
+                },
+                data: result_amount
+            }
+        ]
+    };
     var zoomSize = 6;
     myChart.on('click', function (params) {
-    console.log(result_Axis[params.dataIndex]);
-    eel.SelectKeyWord(result_Axis[params.dataIndex],filename)(ListOutSentences);
-    eel.CountRelation(result_Axis[params.dataIndex],filename)(GetRelation);
+        console.log(result_Axis[params.dataIndex]);
+        eel.SelectKeyWord(result_Axis[params.dataIndex], filename)(ListOutSentences);
+        eel.CountRelation(result_Axis[params.dataIndex], filename)(GetRelation);
+        $('#myModalLabel').text(result_Axis[params.dataIndex]+'与其他关键字分词关系分析')
+        $('#myModal').modal({backdrop: 'static', keyboard: false});
+        $('#myModal').modal('show');
 //    myChart.dispatchAction({
 //        type: 'dataZoom',
 //        startValue: result_Axis[Math.max(params.dataIndex - zoomSize / 2, 0)],
@@ -113,81 +117,127 @@ function CreateAnaylizeChart(result){
     $('#btn3').removeClass('hidden');
     $('#btn4').removeClass('hidden');
 }
-var resultList = [{sentence:'test1'},{sentence:'test2'}];
+
+var resultList = [{sentence: 'test1'}, {sentence: 'test2'}];
 var vm = new Vue({
-        el:'#ResultList',
-        data:{
-            resultList:resultList
-        }
-})
-function GetRelation(result){
+    el: '#ResultList',
+    data: {
+        resultList: resultList
+    }
+});
+var getRandomColor = function(){
+    return '#'+(Math.random()*0xffffff<<0).toString(16);
+};
+
+var getRandom;
+var json;
+function GetRelation(result) {
     console.log(result);
     var myChart_2 = echarts.init(document.getElementById('Chart_2'));
     json = {
         "nodes": [
 
             {
-                "color": "#c71969",
+                "color": getRandomColor(),
                 "label": "underscore",
                 "attributes": {},
-                "y": -734.4221,
-                "x": -75.53079,
+                "y": -700*Math.random()+700*Math.random(),
+                "x": -700*Math.random()+700*Math.random(),
                 "id": "underscore",
                 "size": 100.0
             },
             {
-                "color": "#c71969",
+                "color": getRandomColor(),
                 "label": "faye",
                 "attributes": {},
-                "y": 624.50604,
-                "x": -818.97516,
+                "y":-700*Math.random()+700*Math.random(),
+                "x": -700*Math.random()+700*Math.random(),
                 "id": "faye",
                 "size": 0.67816025
             },
             {
-                "color": "#c71919",
+                "color": getRandomColor(),
                 "label": "socket.io",
                 "attributes": {},
-                "y": 120.37976,
-                "x": -710.59204,
+                "y": -700*Math.random()+700*Math.random(),
+                "x": -700*Math.random()+700*Math.random(),
                 "id": "socket.io",
                 "size": 19.818306
             },
         ],
-        "edges":[
+        "edges": [
             {
-                "sourceID":"underscore",
-                "attributes":{},
-                "targetID":"faye",
-                "size":1
+                "sourceID": "underscore",
+                "attributes": {},
+                "targetID": "faye",
+                "size": 1
             },
             {
-                "sourceID":"underscore",
-                "attributes":{},
-                "targetID":"socket.io",
-                "size":1
+                "sourceID": "underscore",
+                "attributes": {},
+                "targetID": "socket.io",
+                "size": 1
             },
             {
-                "sourceID":"socket.io",
-                "attributes":{},
-                "targetID":"underscore",
-                "size":1
+                "sourceID": "socket.io",
+                "attributes": {},
+                "targetID": "underscore",
+                "size": 1
             },
             {
-                "sourceID":"socket.io",
-                "attributes":{},
-                "targetID":"faye",
-                "size":1
+                "sourceID": "socket.io",
+                "attributes": {},
+                "targetID": "faye",
+                "size": 1
             }
         ]
     };
+    var keyword = null;
+    json = {"nodes":[],"edges":[]};
+    for(var a in result) {
+        if (result[a][1] == 0) {
+            keyword = result[a][0];
+            break;
+        }
+    }
+    for(var a in result){
+        if(result[a][1]==0){
+            keyword = result[a][0];
+            json["nodes"].push({
+                "color": getRandomColor(),
+                "label": keyword,
+                "attributes": {},
+                "y": 0,
+                "x": 0,
+                "id": keyword,
+                "size": 50
+            });
+        }
+        else{
+            json["nodes"].push({
+                "color": getRandomColor(),
+                "label": result[a][0],
+                "attributes": {},
+                "y": -700*Math.random()+700*Math.random()+50,
+                "x": -700*Math.random()+700*Math.random()+50,
+                "id": result[a][0],
+                "size": result[a][1]*Math.random()
+            });
+            json["edges"].push({
+                "sourceID": keyword,
+                "attributes": {},
+                "targetID": result[a][0],
+                "size": 1
+            });
+        }
+    }
     myChart_2.setOption(option = {
         title: {
             text: 'NPM Dependencies'
         },
         animationDurationUpdate: 1500,
         animationEasingUpdate: 'quinticInOut',
-        series : [
+        series: [
             {
                 type: 'graph',
                 layout: 'none',
@@ -234,397 +284,407 @@ function GetRelation(result){
         console.log(params)
     });
 }
-function ListOutSentences(result){
+
+function ListOutSentences(result) {
     var length = resultList.length;
-    for(var a = 0;a<length;a++){
+    for (var a = 0; a < length; a++) {
         resultList.pop();
     }
-    for(var sen in result){
-        resultList.push({'sentence':result[sen].split('match=\'')[1].split('\'')[0]});
+    for (var sen in result) {
+        resultList.push({'sentence': result[sen].split('match=\'')[1].split('\'')[0]});
     }
+
+
+
 }
-function FirstFifteenWords(){
+
+function FirstFifteenWords() {
     currentStart = 0;
     result_Axis = [];
     result_amount = [];
-    for(var WordCut in localestore_result.slice(0,15)){
-        result_Axis.push(localestore_result.slice(0,15)[WordCut][0]);
-        result_amount.push(localestore_result.slice(0,15)[WordCut][1]);
+    for (var WordCut in localestore_result.slice(0, 15)) {
+        result_Axis.push(localestore_result.slice(0, 15)[WordCut][0]);
+        result_amount.push(localestore_result.slice(0, 15)[WordCut][1]);
     }
-    var yMax = Math.ceil(result_amount[0]*1.2);
+    var yMax = Math.ceil(result_amount[0] * 1.2);
     var dataShadow = [];
-    for(var i=0;i<15;i++){
+    for (var i = 0; i < 15; i++) {
         dataShadow.push(yMax);
     }
     option = {
-    title: {
-        text: 'NLP处理后该次无回复问题txt分词统计结果',
-        subtext: '每次显示15个'
-    },
-    xAxis: {
-        data: result_Axis,
-        axisLabel: {
-            inside: true,
-            textStyle: {
-                color: '#fff'
-            }
+        title: {
+            text: 'NLP处理后该次无回复问题txt分词统计结果',
+            subtext: '每次显示15个'
         },
-        axisTick: {
-            show: false
-        },
-        axisLine: {
-            show: false
-        },
-        z: 10
-    },
-    yAxis: {
-        axisLine: {
-            show: false
-        },
-        axisTick: {
-            show: false
-        },
-        axisLabel: {
-            textStyle: {
-                color: '#999'
-            }
-        }
-    },
-    dataZoom: [
-        {
-            type: 'inside'
-        }
-    ],
-    series: [
-        { // For shadow
-            type: 'bar',
-            itemStyle: {
-                normal: {color: 'rgba(0,0,0,0.05)'}
-            },
-            barGap:'-100%',
-            barCategoryGap:'40%',
-            data: dataShadow,
-            animation: false
-        },
-        {
-            type: 'bar',
-            itemStyle: {
-                normal: {
-                    color: new echarts.graphic.LinearGradient(
-                        0, 0, 0, 1,
-                        [
-                            {offset: 0, color: '#83bff6'},
-                            {offset: 0.5, color: '#188df0'},
-                            {offset: 1, color: '#188df0'}
-                        ]
-                    )
-                },
-                emphasis: {
-                    color: new echarts.graphic.LinearGradient(
-                        0, 0, 0, 1,
-                        [
-                            {offset: 0, color: '#2378f7'},
-                            {offset: 0.7, color: '#2378f7'},
-                            {offset: 1, color: '#83bff6'}
-                        ]
-                    )
+        xAxis: {
+            data: result_Axis,
+            axisLabel: {
+                inside: true,
+                textStyle: {
+                    color: '#fff'
                 }
             },
-            data: result_amount
-        }
-    ]
-};
+            axisTick: {
+                show: false
+            },
+            axisLine: {
+                show: false
+            },
+            z: 10
+        },
+        yAxis: {
+            axisLine: {
+                show: false
+            },
+            axisTick: {
+                show: false
+            },
+            axisLabel: {
+                textStyle: {
+                    color: '#999'
+                }
+            }
+        },
+        dataZoom: [
+            {
+                type: 'inside'
+            }
+        ],
+        series: [
+            { // For shadow
+                type: 'bar',
+                itemStyle: {
+                    normal: {color: 'rgba(0,0,0,0.05)'}
+                },
+                barGap: '-100%',
+                barCategoryGap: '40%',
+                data: dataShadow,
+                animation: false
+            },
+            {
+                type: 'bar',
+                itemStyle: {
+                    normal: {
+                        color: new echarts.graphic.LinearGradient(
+                            0, 0, 0, 1,
+                            [
+                                {offset: 0, color: '#83bff6'},
+                                {offset: 0.5, color: '#188df0'},
+                                {offset: 1, color: '#188df0'}
+                            ]
+                        )
+                    },
+                    emphasis: {
+                        color: new echarts.graphic.LinearGradient(
+                            0, 0, 0, 1,
+                            [
+                                {offset: 0, color: '#2378f7'},
+                                {offset: 0.7, color: '#2378f7'},
+                                {offset: 1, color: '#83bff6'}
+                            ]
+                        )
+                    }
+                },
+                data: result_amount
+            }
+        ]
+    };
     var zoomSize = 6;
     myChart.setOption(option);
 }
-function PreviousFifteenWords(){
-    if(currentStart<15){
+
+function PreviousFifteenWords() {
+    if (currentStart < 15) {
         currentStart = 0;
-    }else{
-       currentStart = currentStart - 15;
+    } else {
+        currentStart = currentStart - 15;
     }
     result_Axis = [];
     result_amount = [];
-    for(var WordCut in localestore_result.slice(currentStart,currentStart+15)){
-        result_Axis.push(localestore_result.slice(currentStart,currentStart+15)[WordCut][0]);
-        result_amount.push(localestore_result.slice(currentStart,currentStart+15)[WordCut][1]);
+    for (var WordCut in localestore_result.slice(currentStart, currentStart + 15)) {
+        result_Axis.push(localestore_result.slice(currentStart, currentStart + 15)[WordCut][0]);
+        result_amount.push(localestore_result.slice(currentStart, currentStart + 15)[WordCut][1]);
     }
-    var yMax = Math.ceil(result_amount[0]*1.2);
+    var yMax = Math.ceil(result_amount[0] * 1.2);
     var dataShadow = [];
-    for(var i=0;i<15;i++){
+    for (var i = 0; i < 15; i++) {
         dataShadow.push(yMax);
     }
     option = {
-    title: {
-        text: 'NLP处理后该次无回复问题txt分词统计结果',
-        subtext: '每次显示15个'
-    },
-    xAxis: {
-        data: result_Axis,
-        axisLabel: {
-            inside: true,
-            textStyle: {
-                color: '#fff'
-            }
+        title: {
+            text: 'NLP处理后该次无回复问题txt分词统计结果',
+            subtext: '每次显示15个'
         },
-        axisTick: {
-            show: false
-        },
-        axisLine: {
-            show: false
-        },
-        z: 10
-    },
-    yAxis: {
-        axisLine: {
-            show: false
-        },
-        axisTick: {
-            show: false
-        },
-        axisLabel: {
-            textStyle: {
-                color: '#999'
-            }
-        }
-    },
-    dataZoom: [
-        {
-            type: 'inside'
-        }
-    ],
-    series: [
-        { // For shadow
-            type: 'bar',
-            itemStyle: {
-                normal: {color: 'rgba(0,0,0,0.05)'}
-            },
-            barGap:'-100%',
-            barCategoryGap:'40%',
-            data: dataShadow,
-            animation: false
-        },
-        {
-            type: 'bar',
-            itemStyle: {
-                normal: {
-                    color: new echarts.graphic.LinearGradient(
-                        0, 0, 0, 1,
-                        [
-                            {offset: 0, color: '#83bff6'},
-                            {offset: 0.5, color: '#188df0'},
-                            {offset: 1, color: '#188df0'}
-                        ]
-                    )
-                },
-                emphasis: {
-                    color: new echarts.graphic.LinearGradient(
-                        0, 0, 0, 1,
-                        [
-                            {offset: 0, color: '#2378f7'},
-                            {offset: 0.7, color: '#2378f7'},
-                            {offset: 1, color: '#83bff6'}
-                        ]
-                    )
+        xAxis: {
+            data: result_Axis,
+            axisLabel: {
+                inside: true,
+                textStyle: {
+                    color: '#fff'
                 }
             },
-            data: result_amount
-        }
-    ]
-};
+            axisTick: {
+                show: false
+            },
+            axisLine: {
+                show: false
+            },
+            z: 10
+        },
+        yAxis: {
+            axisLine: {
+                show: false
+            },
+            axisTick: {
+                show: false
+            },
+            axisLabel: {
+                textStyle: {
+                    color: '#999'
+                }
+            }
+        },
+        dataZoom: [
+            {
+                type: 'inside'
+            }
+        ],
+        series: [
+            { // For shadow
+                type: 'bar',
+                itemStyle: {
+                    normal: {color: 'rgba(0,0,0,0.05)'}
+                },
+                barGap: '-100%',
+                barCategoryGap: '40%',
+                data: dataShadow,
+                animation: false
+            },
+            {
+                type: 'bar',
+                itemStyle: {
+                    normal: {
+                        color: new echarts.graphic.LinearGradient(
+                            0, 0, 0, 1,
+                            [
+                                {offset: 0, color: '#83bff6'},
+                                {offset: 0.5, color: '#188df0'},
+                                {offset: 1, color: '#188df0'}
+                            ]
+                        )
+                    },
+                    emphasis: {
+                        color: new echarts.graphic.LinearGradient(
+                            0, 0, 0, 1,
+                            [
+                                {offset: 0, color: '#2378f7'},
+                                {offset: 0.7, color: '#2378f7'},
+                                {offset: 1, color: '#83bff6'}
+                            ]
+                        )
+                    }
+                },
+                data: result_amount
+            }
+        ]
+    };
     var zoomSize = 6;
     myChart.setOption(option);
 
 }
-function NextFifteenWords(){
-    if(currentStart>localestore_result.length-16){
-        currentStart = localestore_result.length-16;
-    }else{
-       currentStart = currentStart + 15;
+
+function NextFifteenWords() {
+    if (currentStart > localestore_result.length - 16) {
+        currentStart = localestore_result.length - 16;
+    } else {
+        currentStart = currentStart + 15;
     }
     result_Axis = [];
     result_amount = [];
-    for(var WordCut in localestore_result.slice(currentStart,currentStart+15)){
-        result_Axis.push(localestore_result.slice(currentStart,currentStart+15)[WordCut][0]);
-        result_amount.push(localestore_result.slice(currentStart,currentStart+15)[WordCut][1]);
+    for (var WordCut in localestore_result.slice(currentStart, currentStart + 15)) {
+        result_Axis.push(localestore_result.slice(currentStart, currentStart + 15)[WordCut][0]);
+        result_amount.push(localestore_result.slice(currentStart, currentStart + 15)[WordCut][1]);
     }
-    var yMax = Math.ceil(result_amount[0]*1.2);
+    var yMax = Math.ceil(result_amount[0] * 1.2);
     var dataShadow = [];
-    for(var i=0;i<15;i++){
+    for (var i = 0; i < 15; i++) {
         dataShadow.push(yMax);
     }
     option = {
-    title: {
-        text: 'NLP处理后该次无回复问题txt分词统计结果',
-        subtext: '每次显示15个'
-    },
-    xAxis: {
-        data: result_Axis,
-        axisLabel: {
-            inside: true,
-            textStyle: {
-                color: '#fff'
-            }
+        title: {
+            text: 'NLP处理后该次无回复问题txt分词统计结果',
+            subtext: '每次显示15个'
         },
-        axisTick: {
-            show: false
-        },
-        axisLine: {
-            show: false
-        },
-        z: 10
-    },
-    yAxis: {
-        axisLine: {
-            show: false
-        },
-        axisTick: {
-            show: false
-        },
-        axisLabel: {
-            textStyle: {
-                color: '#999'
-            }
-        }
-    },
-    dataZoom: [
-        {
-            type: 'inside'
-        }
-    ],
-    series: [
-        { // For shadow
-            type: 'bar',
-            itemStyle: {
-                normal: {color: 'rgba(0,0,0,0.05)'}
-            },
-            barGap:'-100%',
-            barCategoryGap:'40%',
-            data: dataShadow,
-            animation: false
-        },
-        {
-            type: 'bar',
-            itemStyle: {
-                normal: {
-                    color: new echarts.graphic.LinearGradient(
-                        0, 0, 0, 1,
-                        [
-                            {offset: 0, color: '#83bff6'},
-                            {offset: 0.5, color: '#188df0'},
-                            {offset: 1, color: '#188df0'}
-                        ]
-                    )
-                },
-                emphasis: {
-                    color: new echarts.graphic.LinearGradient(
-                        0, 0, 0, 1,
-                        [
-                            {offset: 0, color: '#2378f7'},
-                            {offset: 0.7, color: '#2378f7'},
-                            {offset: 1, color: '#83bff6'}
-                        ]
-                    )
+        xAxis: {
+            data: result_Axis,
+            axisLabel: {
+                inside: true,
+                textStyle: {
+                    color: '#fff'
                 }
             },
-            data: result_amount
-        }
-    ]
-};
+            axisTick: {
+                show: false
+            },
+            axisLine: {
+                show: false
+            },
+            z: 10
+        },
+        yAxis: {
+            axisLine: {
+                show: false
+            },
+            axisTick: {
+                show: false
+            },
+            axisLabel: {
+                textStyle: {
+                    color: '#999'
+                }
+            }
+        },
+        dataZoom: [
+            {
+                type: 'inside'
+            }
+        ],
+        series: [
+            { // For shadow
+                type: 'bar',
+                itemStyle: {
+                    normal: {color: 'rgba(0,0,0,0.05)'}
+                },
+                barGap: '-100%',
+                barCategoryGap: '40%',
+                data: dataShadow,
+                animation: false
+            },
+            {
+                type: 'bar',
+                itemStyle: {
+                    normal: {
+                        color: new echarts.graphic.LinearGradient(
+                            0, 0, 0, 1,
+                            [
+                                {offset: 0, color: '#83bff6'},
+                                {offset: 0.5, color: '#188df0'},
+                                {offset: 1, color: '#188df0'}
+                            ]
+                        )
+                    },
+                    emphasis: {
+                        color: new echarts.graphic.LinearGradient(
+                            0, 0, 0, 1,
+                            [
+                                {offset: 0, color: '#2378f7'},
+                                {offset: 0.7, color: '#2378f7'},
+                                {offset: 1, color: '#83bff6'}
+                            ]
+                        )
+                    }
+                },
+                data: result_amount
+            }
+        ]
+    };
     var zoomSize = 6;
     myChart.setOption(option);
 }
-function LastFifteenWords(){
-    currentStart = localestore_result.length-16
+
+function LastFifteenWords() {
+    currentStart = localestore_result.length - 16
     result_Axis = [];
     result_amount = [];
-    for(var WordCut in localestore_result.slice(-15)){
+    for (var WordCut in localestore_result.slice(-15)) {
         result_Axis.push(localestore_result.slice(-15)[WordCut][0]);
         result_amount.push(localestore_result.slice(-15)[WordCut][1]);
     }
-    var yMax = Math.ceil(result_amount[0]*1.2);
+    var yMax = Math.ceil(result_amount[0] * 1.2);
     var dataShadow = [];
-    for(var i=0;i<15;i++){
+    for (var i = 0; i < 15; i++) {
         dataShadow.push(yMax);
     }
     option = {
-    title: {
-        text: 'NLP处理后该次无回复问题txt分词统计结果',
-        subtext: '每次显示15个'
-    },
-    xAxis: {
-        data: result_Axis,
-        axisLabel: {
-            inside: true,
-            textStyle: {
-                color: '#fff'
-            }
+        title: {
+            text: 'NLP处理后该次无回复问题txt分词统计结果',
+            subtext: '每次显示15个'
         },
-        axisTick: {
-            show: false
-        },
-        axisLine: {
-            show: false
-        },
-        z: 10
-    },
-    yAxis: {
-        axisLine: {
-            show: false
-        },
-        axisTick: {
-            show: false
-        },
-        axisLabel: {
-            textStyle: {
-                color: '#999'
-            }
-        }
-    },
-    dataZoom: [
-        {
-            type: 'inside'
-        }
-    ],
-    series: [
-        { // For shadow
-            type: 'bar',
-            itemStyle: {
-                normal: {color: 'rgba(0,0,0,0.05)'}
-            },
-            barGap:'-100%',
-            barCategoryGap:'40%',
-            data: dataShadow,
-            animation: false
-        },
-        {
-            type: 'bar',
-            itemStyle: {
-                normal: {
-                    color: new echarts.graphic.LinearGradient(
-                        0, 0, 0, 1,
-                        [
-                            {offset: 0, color: '#83bff6'},
-                            {offset: 0.5, color: '#188df0'},
-                            {offset: 1, color: '#188df0'}
-                        ]
-                    )
-                },
-                emphasis: {
-                    color: new echarts.graphic.LinearGradient(
-                        0, 0, 0, 1,
-                        [
-                            {offset: 0, color: '#2378f7'},
-                            {offset: 0.7, color: '#2378f7'},
-                            {offset: 1, color: '#83bff6'}
-                        ]
-                    )
+        xAxis: {
+            data: result_Axis,
+            axisLabel: {
+                inside: true,
+                textStyle: {
+                    color: '#fff'
                 }
             },
-            data: result_amount
-        }
-    ]
-};
+            axisTick: {
+                show: false
+            },
+            axisLine: {
+                show: false
+            },
+            z: 10
+        },
+        yAxis: {
+            axisLine: {
+                show: false
+            },
+            axisTick: {
+                show: false
+            },
+            axisLabel: {
+                textStyle: {
+                    color: '#999'
+                }
+            }
+        },
+        dataZoom: [
+            {
+                type: 'inside'
+            }
+        ],
+        series: [
+            { // For shadow
+                type: 'bar',
+                itemStyle: {
+                    normal: {color: 'rgba(0,0,0,0.05)'}
+                },
+                barGap: '-100%',
+                barCategoryGap: '40%',
+                data: dataShadow,
+                animation: false
+            },
+            {
+                type: 'bar',
+                itemStyle: {
+                    normal: {
+                        color: new echarts.graphic.LinearGradient(
+                            0, 0, 0, 1,
+                            [
+                                {offset: 0, color: '#83bff6'},
+                                {offset: 0.5, color: '#188df0'},
+                                {offset: 1, color: '#188df0'}
+                            ]
+                        )
+                    },
+                    emphasis: {
+                        color: new echarts.graphic.LinearGradient(
+                            0, 0, 0, 1,
+                            [
+                                {offset: 0, color: '#2378f7'},
+                                {offset: 0.7, color: '#2378f7'},
+                                {offset: 1, color: '#83bff6'}
+                            ]
+                        )
+                    }
+                },
+                data: result_amount
+            }
+        ]
+    };
     var zoomSize = 6;
     myChart.setOption(option);
 }
+
+
