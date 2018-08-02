@@ -284,7 +284,17 @@ function GetRelation(result) {
     }, true);
     myChart_2.on('click', function (params) {
         console.log(params)
+        if(params.data.source === undefined){
+
+        }else{
+            eel.TwoWordSentence(filename,params.data.source,params.data.target)(PrintOutTwoWordSentence);
+        }
     });
+}
+function PrintOutTwoWordSentence(result){
+    for(var a in result){
+        console.log(result[a]);
+    }
 }
 
 function ListOutSentences(result) {

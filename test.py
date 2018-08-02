@@ -130,7 +130,7 @@ def AddToStopWordList(word):
 
 @eel.expose
 def AddToYYSKeyWordList(word):
-    yyswordlist = open('yyskeywordlist.txt','a')
+    yyswordlist = open('yyskeywordlist.txt','a',encoding='Utf-8')
     yyswordlist.write(word+'\n')
     yyswordlist.close()
     print('AddtoYYSKeyWordList'+word)
@@ -196,11 +196,38 @@ def CountRelation(keyword, filename):
             return wordlist.most_common()
 
 
+@eel.expose
+def TwoWordSentence(filename,word1, word2):
+    reg = re.compile('(.*)' + word1 + '(.*)'+word2+'(.*)')
+    reg2 = re.compile('(.*)' + word2 + '(.*)'+word1+'(.*)')
+    result = []
+    start = 0
+    id = 1
+    with open(filename, 'r', encoding='gb18030', errors='ignore') as f:
+        try:
+            # while True:
+            for lines in f.readlines():
+                # lines = f.readline()
+                start = start + 1
+                if start >= 7:
+                    lines = lines.strip()
+                    a = re.match(reg, lines)
+                    a1 = re.match(reg2,lines)
+                    if str(a) != 'None':
+                        print(a)
+                        result.append(lines)
+                    if str(a1) != 'None':
+                        print(a)
+                        result.append(lines)
+            print('finish')
+            print(result)
+            return result
+        except:
+            return result
 
 
 eel.init('web')
 eel.start('test.html')
-
 
 
 
