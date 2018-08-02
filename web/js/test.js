@@ -695,3 +695,9 @@ function AddToYysWordList(){
     console.log($('#btn_addYysWordList').val());
     eel.AddToYYSKeyWordList($('#btn_addYysWordList').val());
 }
+
+function GoToAnaylize(){
+  var filename = $('#file_position')[0].files[0].name;
+  $('#StartPage').addClass("hidden");
+  eel.Anaylize(filename)(CreateAnaylizeChart);
+}

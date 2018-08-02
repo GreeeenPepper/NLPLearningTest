@@ -17,10 +17,17 @@
             <small>Powered By Bellong.WYZ</small>
         </h1>
     </div>
+    <div class="jumbotron" id="StartPage">
+        <h3>选择该次要分析的文件</h3>
+        <p><a class="btn btn-primary"  href="#" role="button"><input id="file_position" type="file"></a></p>
+        <button id="GoToAnaylize" type="button" style="outline:none" class="btn btn-success btn-lg"
+                onclick="GoToAnaylize()">分析
+        </button>
+    </div>
     <div id="Chart_1" style="width:1200px;height:600px"></div>
     <div style="margin:auto;text-align:center">
         <div class="btn-group" style="margin:20px">
-            <button id="btn1" type="button" style="outline:none" class="btn btn-success btn-lg hidden"
+            <button id="btn1" type="button" style="outline:none" class="btn btn-success btn-lag hidden"
                     onclick="FirstFifteenWords()">出现次数最高15项
             </button>
         </div>
