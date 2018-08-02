@@ -121,6 +121,19 @@ def SelectKeyWord(keyword, filename):
             return result
 
 # print(count_reask)
+@eel.expose
+def AddToStopWordList(word):
+    stop_word_file = open('stopword','a')
+    stop_word_file.write(word+'\n')
+    stop_word_file.close()
+    print('AddtoStopWordList'+word)
+
+@eel.expose
+def AddToYYSKeyWordList(word):
+    yyswordlist = open('yyskeywordlist.txt','a')
+    yyswordlist.write(word+'\n')
+    yyswordlist.close()
+    print('AddtoYYSKeyWordList'+word)
 
 @eel.expose
 def CountRelation(keyword, filename):
@@ -169,15 +182,15 @@ def CountRelation(keyword, filename):
                                     wordlist[word] = wordlist[word] + 1
             print('finish')
             print(wordlist.most_common())
-            filename_c = 'CountRelation_'+keyword+'.json'
-            result_file = open(filename_c, 'w', encoding='utf-8', errors='ignore')
-            result_file.write('[')
+            #filename_c = 'CountRelation_'+keyword+'.json'
+            #result_file = open(filename_c, 'w', encoding='utf-8', errors='ignore')
+            #result_file.write('[')
             for (k, v) in wordlist.most_common():
                 print('%s%s %s  %d' % ('  ' * (5 - len(k)), k, '*' * int(v / 3), v))
-                result_file.write('{\"Keyword\":\"' + k + '\",\"amount\":' + str(v) + '}')
-                result_file.write(',')
-            result_file.write(']')
-            result_file.close()
+                #result_file.write('{\"Keyword\":\"' + k + '\",\"amount\":' + str(v) + '}')
+                #result_file.write(',')
+            #result_file.write(']')
+            #result_file.close()
             return wordlist.most_common()
         except:
             return wordlist.most_common()

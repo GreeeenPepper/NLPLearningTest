@@ -102,7 +102,9 @@ function CreateAnaylizeChart(result) {
         console.log(result_Axis[params.dataIndex]);
         eel.SelectKeyWord(result_Axis[params.dataIndex], filename)(ListOutSentences);
         eel.CountRelation(result_Axis[params.dataIndex], filename)(GetRelation);
-        $('#myModalLabel').text(result_Axis[params.dataIndex]+'与其他关键字分词关系分析')
+        $('#myModalLabel').text(result_Axis[params.dataIndex]+'与其他关键字分词关系分析');
+        $('#btn_add_stopword').attr('value',result_Axis[params.dataIndex]);
+        $('#btn_addYysWordList').attr('value',result_Axis[params.dataIndex]);
         $('#myModal').modal({backdrop: 'static', keyboard: false});
         $('#myModal').modal('show');
 //    myChart.dispatchAction({
@@ -131,7 +133,7 @@ var getRandomColor = function(){
 
 var getRandom;
 var json;
-function GetRelation(result) {
+function GetRelation(result) {  
     console.log(result);
     var myChart_2 = echarts.init(document.getElementById('Chart_2'));
     json = {
@@ -293,9 +295,6 @@ function ListOutSentences(result) {
     for (var sen in result) {
         resultList.push({'sentence': result[sen].split('match=\'')[1].split('\'')[0]});
     }
-
-
-
 }
 
 function FirstFifteenWords() {
@@ -688,3 +687,11 @@ function LastFifteenWords() {
 }
 
 
+function AddToStopWordList(){
+    console.log($('#btn_add_stopword').val());
+    eel.AddToStopWordList($('#btn_add_stopword').val());
+}
+function AddToYysWordList(){
+    console.log($('#btn_addYysWordList').val());
+    eel.AddToYYSKeyWordList($('#btn_addYysWordList').val());
+}
