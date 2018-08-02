@@ -293,7 +293,11 @@ function ListOutSentences(result) {
         resultList.pop();
     }
     for (var sen in result) {
-        resultList.push({'sentence': result[sen].split('match=\'')[1].split('\'')[0]});
+        try {
+            resultList.push({'sentence': result[sen].split('match=\'')[1].split('\'')[0]});
+        }catch(error){
+            resultList.push(result[sen]);
+        }
     }
 }
 
