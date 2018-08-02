@@ -99,7 +99,7 @@ function CreateAnaylizeChart(result) {
     };
     var zoomSize = 6;
     myChart.on('click', function (params) {
-        console.log(result_Axis[params.dataIndex]);
+        // console.log(result_Axis[params.dataIndex]);
         eel.SelectKeyWord(result_Axis[params.dataIndex], filename)(ListOutSentences);
         eel.CountRelation(result_Axis[params.dataIndex], filename)(GetRelation);
         $('#myModalLabel').text(result_Axis[params.dataIndex]+'与其他关键字分词关系分析');
@@ -130,11 +130,9 @@ var vm = new Vue({
 var getRandomColor = function(){
     return '#'+(Math.random()*0xffffff<<0).toString(16);
 };
-
-var getRandom;
 var json;
 function GetRelation(result) {  
-    console.log(result);
+    // console.log(result);
     var myChart_2 = echarts.init(document.getElementById('Chart_2'));
     json = {
         "nodes": [
@@ -283,9 +281,8 @@ function GetRelation(result) {
         ]
     }, true);
     myChart_2.on('click', function (params) {
-        console.log(params)
         if(params.data.source === undefined){
-
+            eel.TwoWordSentence(filename,params.data.name,keyword)(PrintOutTwoWordSentence);
         }else{
             eel.TwoWordSentence(filename,params.data.source,params.data.target)(PrintOutTwoWordSentence);
         }
@@ -702,11 +699,11 @@ function LastFifteenWords() {
 
 
 function AddToStopWordList(){
-    console.log($('#btn_add_stopword').val());
+    // console.log($('#btn_add_stopword').val());
     eel.AddToStopWordList($('#btn_add_stopword').val());
 }
 function AddToYysWordList(){
-    console.log($('#btn_addYysWordList').val());
+    // console.log($('#btn_addYysWordList').val());
     eel.AddToYYSKeyWordList($('#btn_addYysWordList').val());
 }
 
