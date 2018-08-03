@@ -5,6 +5,25 @@ var result_Axis = [];
 var result_amount = [];
 var filename = '20180730.txt';
 
+function CountPercantage() {
+    var TotalNumber = 0;
+    var Max_5 = [];
+    for (var a in localestore_result) {
+        if (a <= 5) {
+            Max_5.push({'word': localestore_result[a][0], 'amount': localestore_result[a][1]});
+            console.log(localestore_result[a]);
+        }
+        TotalNumber = TotalNumber + localestore_result[a][1];
+        // console.log(TotalNumber);
+    }
+    console.log(TotalNumber);
+    console.log(Max_5);
+    for (var x in Max_5) {
+        Max_5[x]['per'] = ((Max_5[x]["amount"] / TotalNumber) * 100 + '%');
+    }
+    console.log(Max_5);
+}
+
 function CreateAnaylizeChart(result) {
     localestore_result = result;
     myChart = echarts.init(document.getElementById('Chart_1'));
@@ -102,9 +121,9 @@ function CreateAnaylizeChart(result) {
         // console.log(result_Axis[params.dataIndex]);
         eel.SelectKeyWord(result_Axis[params.dataIndex], filename)(ListOutSentences);
         eel.CountRelation(result_Axis[params.dataIndex], filename)(GetRelation);
-        $('#myModalLabel').text(result_Axis[params.dataIndex]+'与其他关键字分词关系分析');
-        $('#btn_add_stopword').attr('value',result_Axis[params.dataIndex]);
-        $('#btn_addYysWordList').attr('value',result_Axis[params.dataIndex]);
+        $('#myModalLabel').text(result_Axis[params.dataIndex] + '与其他关键字分词关系分析');
+        $('#btn_add_stopword').attr('value', result_Axis[params.dataIndex]);
+        $('#btn_addYysWordList').attr('value', result_Axis[params.dataIndex]);
         $('#myModal').modal({backdrop: 'static', keyboard: false});
         $('#myModal').modal('show');
 //    myChart.dispatchAction({
@@ -127,11 +146,12 @@ var vm = new Vue({
         resultList: resultList
     }
 });
-var getRandomColor = function(){
-    return '#'+(Math.random()*0xffffff<<0).toString(16);
+var getRandomColor = function () {
+    return '#' + (Math.random() * 0xffffff << 0).toString(16);
 };
 var json;
-function GetRelation(result) {  
+
+function GetRelation(result) {
     // console.log(result);
     var myChart_2 = echarts.init(document.getElementById('Chart_2'));
     json = {
@@ -141,8 +161,8 @@ function GetRelation(result) {
                 "color": getRandomColor(),
                 "label": "underscore",
                 "attributes": {},
-                "y": -700*Math.random()+700*Math.random(),
-                "x": -700*Math.random()+700*Math.random(),
+                "y": -700 * Math.random() + 700 * Math.random(),
+                "x": -700 * Math.random() + 700 * Math.random(),
                 "id": "underscore",
                 "size": 100.0
             },
@@ -150,8 +170,8 @@ function GetRelation(result) {
                 "color": getRandomColor(),
                 "label": "faye",
                 "attributes": {},
-                "y":-700*Math.random()+700*Math.random(),
-                "x": -700*Math.random()+700*Math.random(),
+                "y": -700 * Math.random() + 700 * Math.random(),
+                "x": -700 * Math.random() + 700 * Math.random(),
                 "id": "faye",
                 "size": 0.67816025
             },
@@ -159,8 +179,8 @@ function GetRelation(result) {
                 "color": getRandomColor(),
                 "label": "socket.io",
                 "attributes": {},
-                "y": -700*Math.random()+700*Math.random(),
-                "x": -700*Math.random()+700*Math.random(),
+                "y": -700 * Math.random() + 700 * Math.random(),
+                "x": -700 * Math.random() + 700 * Math.random(),
                 "id": "socket.io",
                 "size": 19.818306
             },
@@ -193,15 +213,15 @@ function GetRelation(result) {
         ]
     };
     var keyword = null;
-    json = {"nodes":[],"edges":[]};
-    for(var a in result) {
+    json = {"nodes": [], "edges": []};
+    for (var a in result) {
         if (result[a][1] == 0) {
             keyword = result[a][0];
             break;
         }
     }
-    for(var a in result){
-        if(result[a][1]==0){
+    for (var a in result) {
+        if (result[a][1] == 0) {
             keyword = result[a][0];
             json["nodes"].push({
                 "color": getRandomColor(),
@@ -213,15 +233,15 @@ function GetRelation(result) {
                 "size": 50
             });
         }
-        else{
+        else {
             json["nodes"].push({
                 "color": getRandomColor(),
                 "label": result[a][0],
                 "attributes": {},
-                "y": -700*Math.random()+700*Math.random()+50,
-                "x": -700*Math.random()+700*Math.random()+50,
+                "y": -700 * Math.random() + 700 * Math.random() + 50,
+                "x": -700 * Math.random() + 700 * Math.random() + 50,
                 "id": result[a][0],
-                "size": result[a][1]*Math.random()
+                "size": result[a][1] * Math.random()
             });
             json["edges"].push({
                 "sourceID": keyword,
@@ -281,15 +301,16 @@ function GetRelation(result) {
         ]
     }, true);
     myChart_2.on('click', function (params) {
-        if(params.data.source === undefined){
-            eel.TwoWordSentence(filename,params.data.name,keyword)(PrintOutTwoWordSentence);
-        }else{
-            eel.TwoWordSentence(filename,params.data.source,params.data.target)(PrintOutTwoWordSentence);
+        if (params.data.source === undefined) {
+            eel.TwoWordSentence(filename, params.data.name, keyword)(PrintOutTwoWordSentence);
+        } else {
+            eel.TwoWordSentence(filename, params.data.source, params.data.target)(PrintOutTwoWordSentence);
         }
     });
 }
-function PrintOutTwoWordSentence(result){
-    for(var a in result){
+
+function PrintOutTwoWordSentence(result) {
+    for (var a in result) {
         console.log(result[a]);
     }
 }
@@ -302,7 +323,7 @@ function ListOutSentences(result) {
     for (var sen in result) {
         try {
             resultList.push({'sentence': result[sen].split('match=\'')[1].split('\'')[0]});
-        }catch(error){
+        } catch (error) {
             resultList.push(result[sen]);
         }
     }
@@ -698,17 +719,19 @@ function LastFifteenWords() {
 }
 
 
-function AddToStopWordList(){
+function AddToStopWordList() {
     // console.log($('#btn_add_stopword').val());
     eel.AddToStopWordList($('#btn_add_stopword').val());
 }
-function AddToYysWordList(){
+
+function AddToYysWordList() {
     // console.log($('#btn_addYysWordList').val());
     eel.AddToYYSKeyWordList($('#btn_addYysWordList').val());
 }
 
-function GoToAnaylize(){
-  var filename = $('#file_position')[0].files[0].name;
-  $('#StartPage').addClass("hidden");
-  eel.Anaylize(filename)(CreateAnaylizeChart);
+function GoToAnaylize() {
+    var filename = $('#file_position')[0].files[0].name;
+    $('#StartPage').addClass("hidden");
+    eel.Anaylize(filename)(CreateAnaylizeChart);
 }
+

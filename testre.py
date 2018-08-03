@@ -1,12 +1,16 @@
-import re
+from aip import AipNlp
 
-word1 = '式神'
-word2 = '御魂'
+APP_ID = '11629419'
+API_KEY = 'HlaRo0TMQMxiwC4Xhxatu3EZ'
+SECRET_KEY = '9oEnPFG9BbG4wmxTF6NziyaFUl0Tof5M'
 
-sen = '式神的御魂'
-sen2 = '这个御魂的式神怎么配'
+client = AipNlp(APP_ID,API_KEY,SECRET_KEY)
 
-reg = re.compile('(.*)' + word1 + '(.*)'+word2+'(.*)')
+seg = client.lexerCustom('大天狗御魂怎么搭配');
 
-a = re.match(reg,sen);
-print(a)
+print(seg);
+
+comment = client.lexerCustom("血月推荐阵容")
+
+print(comment)
+

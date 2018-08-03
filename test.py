@@ -5,6 +5,14 @@ from collections import Counter
 import re
 import eel
 import math
+from aip import AipNlp
+import traceback
+
+APP_ID = '11629419'
+API_KEY = 'HlaRo0TMQMxiwC4Xhxatu3EZ'
+SECRET_KEY = '9oEnPFG9BbG4wmxTF6NziyaFUl0Tof5M'
+
+client = AipNlp(APP_ID,API_KEY,SECRET_KEY)
 
 count_reask = 0
 c = Counter()
@@ -45,7 +53,10 @@ def Anaylize(filename):
                     lines = lines.strip()
                     if lines[0] == '【':
                         mystr = lines.split('】')[1]
+                        #mystr_baidu = mystr
                         seg_list = jieba.cut(mystr)
+                        #seg = client.lexerCustom(mystr_baidu)
+                        #print(seg)
                         getWordsFromSeg(seg_list)
                         #print('Type1')
                         print(str(id) + "  : " + "/ ".join(seg_list))
@@ -57,8 +68,14 @@ def Anaylize(filename):
                         if mystr_1[0] == '【':
                             mystr_1_r = mystr_1.split('】')[1]
                             mystr_2_r = mystr_2.split('】')[1]
+                            #mystr_1_r_baidu = mystr_1_r
+                            #mystr_2_r_baidu = mystr_2_r
                             seg_list_6 = jieba.cut(mystr_1_r)
                             seg_list_7 = jieba.cut(mystr_2_r)
+                            #seg6 = client.lexerCustom(mystr_1_r_baidu)
+                            #print(seg6)
+                            #seg7 = client.lexerCustom(mystr_2_r_baidu)
+                            #print(seg7)
                             getWordsFromSeg(seg_list_6)
                             print(str(id) + "  : " + "/ ".join(seg_list_6))
                             getWordsFromSeg(seg_list_7)
@@ -66,7 +83,13 @@ def Anaylize(filename):
 
                         else:
                             seg_list_4 = jieba.cut(mystr_1)
+                            #mystr_1_r_baidu = mystr_1
+                            #mystr_2_r_baidu = mystr_2
+                            #seg4 = client.lexerCustom(mystr_1_r_baidu)
+                            #print(seg4)
                             seg_list_5 = jieba.cut(mystr_2)
+                            #seg5 = client.lexerCustom(mystr_2_r_baidu)
+                            #print(seg5)
                             getWordsFromSeg(seg_list_4)
                             print(str(id) + "  : " + "/ ".join(seg_list_4))
                             getWordsFromSeg(seg_list_5)
@@ -75,20 +98,27 @@ def Anaylize(filename):
                     if lines[0] != '{' and lines[0] != '【' and lines[0] != 'V':
                         #print('Type3')
                         seg_list_3 = jieba.cut(lines)
+                        #mystr_lines_baidu = lines
+                        #seg3 = client.lexerCustom(mystr_lines_baidu)
+                        #print(seg3)
                         getWordsFromSeg(seg_list_3)
                         print(str(id) + "  : " + "/ ".join(seg_list_3))
                         id = id + 1
         except:
             print('woops')
+            traceback.print_exc()
             print(c.most_common())
             result_file = open('web/result_file.json', 'w', encoding='utf-8', errors='ignore')
             result_file.write('[')
+            abc = 0
             for (k, v) in c.most_common():
                 print('%s%s %s  %d' % ('  ' * (5 - len(k)), k, '*' * int(v / 3), v))
                 result_file.write('{\"Keyword\":\"'+k+'\",\"amount\":'+str(v)+'}')
                 result_file.write(',')
+                abc = abc + v
             result_file.write(']')
             result_file.close()
+            print(abc)
             return c.most_common()
 
 @eel.expose
