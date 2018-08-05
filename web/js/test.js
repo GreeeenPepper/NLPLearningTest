@@ -3,8 +3,7 @@ var myChart = null;
 var currentStart = 0;
 var result_Axis = [];
 var result_amount = [];
-var filename = '20180730.txt';
-
+var filename = null;
 function CountPercantage() {
     var TotalNumber = 0;
     var Max_5 = [];
@@ -146,10 +145,20 @@ var vm = new Vue({
         resultList: resultList
     }
 });
+var resultList2 = [{sentence: 'test1'}, {sentence: 'test2'}];
+var vm = new Vue({
+    el: '#ResultList2',
+    data: {
+        resultList: resultList2
+    }
+});
 var getRandomColor = function () {
     return '#' + (Math.random() * 0xffffff << 0).toString(16);
 };
 var json;
+
+var t_word1;
+var t_word2;
 
 function GetRelation(result) {
     // console.log(result);
@@ -213,16 +222,18 @@ function GetRelation(result) {
         ]
     };
     var keyword = null;
+    var MaxNumber = null;
+    var MaxRelationNumber = result[0][1];
     json = {"nodes": [], "edges": []};
     for (var a in result) {
         if (result[a][1] == 0) {
             keyword = result[a][0];
+            MaxNumber = result[a][1];
             break;
         }
     }
     for (var a in result) {
         if (result[a][1] == 0) {
-            keyword = result[a][0];
             json["nodes"].push({
                 "color": getRandomColor(),
                 "label": keyword,
@@ -230,7 +241,7 @@ function GetRelation(result) {
                 "y": 0,
                 "x": 0,
                 "id": keyword,
-                "size": 50
+                "size": 40
             });
         }
         else {
@@ -241,7 +252,7 @@ function GetRelation(result) {
                 "y": -700 * Math.random() + 700 * Math.random() + 50,
                 "x": -700 * Math.random() + 700 * Math.random() + 50,
                 "id": result[a][0],
-                "size": result[a][1] * Math.random()
+                "size": Math.ceil(result[a][1]*40/MaxRelationNumber)
             });
             json["edges"].push({
                 "sourceID": keyword,
@@ -253,7 +264,7 @@ function GetRelation(result) {
     }
     myChart_2.setOption(option = {
         title: {
-            text: 'NPM Dependencies'
+            text: '\"'+keyword+'\"分词与其他分词关系'
         },
         animationDurationUpdate: 1500,
         animationEasingUpdate: 'quinticInOut',
@@ -301,6 +312,8 @@ function GetRelation(result) {
         ]
     }, true);
     myChart_2.on('click', function (params) {
+        t_word1 = params.data.name;
+        t_word2 = keyword;
         if (params.data.source === undefined) {
             eel.TwoWordSentence(filename, params.data.name, keyword)(PrintOutTwoWordSentence);
         } else {
@@ -313,6 +326,10 @@ function PrintOutTwoWordSentence(result) {
     for (var a in result) {
         console.log(result[a]);
     }
+    $('#myModal2Label').text('同时存在\"'+ t_word1 + '\"和\"' + t_word2 +'\"两个分词结果的回复');
+    $('#myModal2').modal({backdrop: 'static', keyboard: false});
+    $('#myModal2').modal('show');
+    ListOutSentences2(result);
 }
 
 function ListOutSentences(result) {
@@ -324,7 +341,21 @@ function ListOutSentences(result) {
         try {
             resultList.push({'sentence': result[sen].split('match=\'')[1].split('\'')[0]});
         } catch (error) {
-            resultList.push(result[sen]);
+            resultList2.push({'sentence': result[sen]});
+        }
+    }
+}
+
+function ListOutSentences2(result){
+    var length = resultList2.length;
+    for (var a = 0; a < length; a++) {
+        resultList2.pop();
+    }
+    for (var sen in result) {
+        try {
+            resultList2.push({'sentence': result[sen].split('match=\'')[1].split('\'')[0]});
+        } catch (error) {
+            resultList2.push({'sentence': result[sen]});
         }
     }
 }
@@ -730,7 +761,7 @@ function AddToYysWordList() {
 }
 
 function GoToAnaylize() {
-    var filename = $('#file_position')[0].files[0].name;
+    filename = $('#file_position')[0].files[0].name;
     $('#StartPage').addClass("hidden");
     eel.Anaylize(filename)(CreateAnaylizeChart);
 }

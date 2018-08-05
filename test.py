@@ -5,14 +5,8 @@ from collections import Counter
 import re
 import eel
 import math
-from aip import AipNlp
 import traceback
 
-APP_ID = '11629419'
-API_KEY = 'HlaRo0TMQMxiwC4Xhxatu3EZ'
-SECRET_KEY = '9oEnPFG9BbG4wmxTF6NziyaFUl0Tof5M'
-
-client = AipNlp(APP_ID,API_KEY,SECRET_KEY)
 
 count_reask = 0
 c = Counter()
@@ -132,23 +126,26 @@ def SelectKeyWord(keyword, filename):
     start = 0
     id = 1
     with open(filename, 'r', encoding='gb18030', errors='ignore') as f:
-        try:
-            # while True:
-            for lines in f.readlines():
-                # lines = f.readline()
+        # while True:
+        for lines in f.readlines():
+            # lines = f.readline()
+            lines = lines.strip()
+            print(lines)
+            try:
                 start = start + 1
                 if start >= 7:
-                    lines = lines.strip()
                     regex = re.compile('(.*)'+keyword+'(.*)')
                     a = re.match(regex, lines)
+                    print(a)
                     if str(a) != 'None':
                         print(a)
                         result.append(str(a))
-            print('finish')
-            print(result)
-            return result
-        except:
-            return result
+            except Exception as e:
+                print(lines)
+                print(e)
+        print('finish')
+        print(result)
+        return result
 
 # print(count_reask)
 @eel.expose
