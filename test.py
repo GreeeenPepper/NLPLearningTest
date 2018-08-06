@@ -1,17 +1,16 @@
 import jieba
-import sys
-import jieba.posseg as psg
+jieba.set_dictionary("dict.txt")
+jieba.initialize()
 from collections import Counter
 import re
 import eel
-import math
 import traceback
-
 
 count_reask = 0
 c = Counter()
 
-stop_f = open('stopword', "r", encoding='gbk')
+
+stop_f = open('stopword', "r", encoding='UTF-8')
 stop_words = list()
 for line in stop_f.readlines():
     line = line.strip()
@@ -20,7 +19,7 @@ for line in stop_f.readlines():
     stop_words.append(line)
 stop_f.close
 
-jieba.load_userdict('yyskeywordlist.txt')
+jieba.load_userdict('yys.txt')
 
 my_filename = '20180731.txt'
 
@@ -99,20 +98,20 @@ def Anaylize(filename):
                         print(str(id) + "  : " + "/ ".join(seg_list_3))
                         id = id + 1
         except:
-            print('woops')
+            #print('woops')
             traceback.print_exc()
-            print(c.most_common())
+            #print(c.most_common())
             result_file = open('web/result_file.json', 'w', encoding='utf-8', errors='ignore')
             result_file.write('[')
             abc = 0
             for (k, v) in c.most_common():
-                print('%s%s %s  %d' % ('  ' * (5 - len(k)), k, '*' * int(v / 3), v))
+                #print('%s%s %s  %d' % ('  ' * (5 - len(k)), k, '*' * int(v / 3), v))
                 result_file.write('{\"Keyword\":\"'+k+'\",\"amount\":'+str(v)+'}')
                 result_file.write(',')
                 abc = abc + v
             result_file.write(']')
             result_file.close()
-            print(abc)
+            #print(abc)
             return c.most_common()
 
 @eel.expose
@@ -136,12 +135,12 @@ def SelectKeyWord(keyword, filename):
                 if start >= 7:
                     regex = re.compile('(.*)'+keyword+'(.*)')
                     a = re.match(regex, lines)
-                    print(a)
+                    #print(a)
                     if str(a) != 'None':
-                        print(a)
+                        #print(a)
                         result.append(str(a))
             except Exception as e:
-                print(lines)
+                #print(lines)
                 print(e)
         print('finish')
         print(result)
@@ -157,7 +156,7 @@ def AddToStopWordList(word):
 
 @eel.expose
 def AddToYYSKeyWordList(word):
-    yyswordlist = open('yyskeywordlist.txt','a',encoding='Utf-8')
+    yyswordlist = open('yys.txt','a',encoding='Utf-8')
     yyswordlist.write(word+'\n')
     yyswordlist.close()
     print('AddtoYYSKeyWordList'+word)
@@ -193,19 +192,19 @@ def CountRelation(keyword, filename):
                                 seg_list_count = jieba.cut(mystr_1)
                                 seg_list_temp = jieba.cut(mystr_2)
                         if lines[0] != '{' and lines[0] != '【' and lines[0] != 'V':
-                            # print('Type3')
+                            #print('Type3')
                             seg_list_count = jieba.cut(lines)
-                        print('yeah！')
+                        #print('yeah！')
                     for word in seg_list_count:
                         if word not in stop_words:
-                            print(word)
+                            #print(word)
                             if word != keyword:
                                 wordlist[word] = wordlist[word] + 1
                     if seg_list_temp:
                         for word in seg_list_temp:
                             if word not in stop_words:
                                 if word != keyword:
-                                    print(word)
+                                    #print(word)
                                     wordlist[word] = wordlist[word] + 1
             print('finish')
             print(wordlist.most_common())
@@ -241,10 +240,10 @@ def TwoWordSentence(filename,word1, word2):
                     a = re.match(reg, lines)
                     a1 = re.match(reg2,lines)
                     if str(a) != 'None':
-                        print(a)
+                        #print(a)
                         result.append(lines)
                     if str(a1) != 'None':
-                        print(a)
+                        #print(a)
                         result.append(lines)
             print('finish')
             print(result)
@@ -252,7 +251,7 @@ def TwoWordSentence(filename,word1, word2):
         except:
             return result
 
-
+print('StartRunning')
 eel.init('web')
 eel.start('test.html')
 

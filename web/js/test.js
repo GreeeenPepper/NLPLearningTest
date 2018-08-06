@@ -762,6 +762,7 @@ function AddToYysWordList() {
 
 function GoToAnaylize() {
     filename = $('#file_position')[0].files[0].name;
+    filename ="..\\Anaylize\\" + filename;
     $('#StartPage').addClass("hidden");
     eel.Anaylize(filename)(CreateAnaylizeChart);
 }
