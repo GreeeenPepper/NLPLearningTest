@@ -10,7 +10,7 @@ count_reask = 0
 c = Counter()
 
 
-stop_f = open('stopword', "r", encoding='UTF-8')
+stop_f = open('stopword', "r", encoding='utf-8')
 stop_words = list()
 for line in stop_f.readlines():
     line = line.strip()
@@ -149,7 +149,7 @@ def SelectKeyWord(keyword, filename):
 # print(count_reask)
 @eel.expose
 def AddToStopWordList(word):
-    stop_word_file = open('stopword','a')
+    stop_word_file = open('stopword','a', encoding='utf-8')
     stop_word_file.write(word+'\n')
     stop_word_file.close()
     print('AddtoStopWordList'+word)
