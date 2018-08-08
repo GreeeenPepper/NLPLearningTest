@@ -111,6 +111,12 @@ function CreateAnaylizeChart(result) {
                         )
                     }
                 },
+                label: {
+                    normal: {
+                        show: true,
+                        position: 'top'
+                    }
+                },
                 data: result_amount
             }
         ]
@@ -125,6 +131,8 @@ function CreateAnaylizeChart(result) {
         $('#btn_addYysWordList').attr('value', result_Axis[params.dataIndex]);
         $('#myModal').modal({backdrop: 'static', keyboard: false});
         $('#myModal').modal('show');
+        $('#myModalLoading').modal({backdrop: 'static', keyboard: false});
+        $('#myModalLoading').modal('show');
 //    myChart.dispatchAction({
 //        type: 'dataZoom',
 //        startValue: result_Axis[Math.max(params.dataIndex - zoomSize / 2, 0)],
@@ -136,6 +144,7 @@ function CreateAnaylizeChart(result) {
     $('#btn2').removeClass('hidden');
     $('#btn3').removeClass('hidden');
     $('#btn4').removeClass('hidden');
+    $('#myModalLoading').modal('hide');
 }
 
 var resultList = [{sentence: 'test1'}, {sentence: 'test2'}];
@@ -192,7 +201,7 @@ function GetRelation(result) {
                 "x": -700 * Math.random() + 700 * Math.random(),
                 "id": "socket.io",
                 "size": 19.818306
-            },
+            }
         ],
         "edges": [
             {
@@ -244,7 +253,7 @@ function GetRelation(result) {
                 "size": 40
             });
         }
-        else {
+        else if(result[a][0] !== " "){
             json["nodes"].push({
                 "color": getRandomColor(),
                 "label": result[a][0],
@@ -312,14 +321,20 @@ function GetRelation(result) {
         ]
     }, true);
     myChart_2.on('click', function (params) {
+        // console.log(params);
         t_word1 = params.data.name;
         t_word2 = keyword;
+        // console.log(t_word1);
+        // console.log(t_word2);
         if (params.data.source === undefined) {
             eel.TwoWordSentence(filename, params.data.name, keyword)(PrintOutTwoWordSentence);
+            console.log("targetGet");
         } else {
+            t_word1 = params.data.target;
             eel.TwoWordSentence(filename, params.data.source, params.data.target)(PrintOutTwoWordSentence);
         }
     });
+    $('#myModalLoading').modal('hide');
 }
 
 function PrintOutTwoWordSentence(result) {
@@ -329,6 +344,7 @@ function PrintOutTwoWordSentence(result) {
     $('#myModal2Label').text('同时存在\"'+ t_word1 + '\"和\"' + t_word2 +'\"两个分词结果的回复');
     $('#myModal2').modal({backdrop: 'static', keyboard: false});
     $('#myModal2').modal('show');
+    $('#CheckSecondWord').text("\""+t_word1+"\""+"->查看该词的分析");
     ListOutSentences2(result);
 }
 
@@ -447,6 +463,12 @@ function FirstFifteenWords() {
                         )
                     }
                 },
+                label: {
+                    normal: {
+                        show: true,
+                        position: 'top'
+                    }
+                },
                 data: result_amount
             }
         ]
@@ -544,6 +566,12 @@ function PreviousFifteenWords() {
                                 {offset: 1, color: '#83bff6'}
                             ]
                         )
+                    }
+                },
+                label: {
+                    normal: {
+                        show: true,
+                        position: 'top'
                     }
                 },
                 data: result_amount
@@ -646,6 +674,12 @@ function NextFifteenWords() {
                         )
                     }
                 },
+                label: {
+                    normal: {
+                        show: true,
+                        position: 'top'
+                    }
+                },
                 data: result_amount
             }
         ]
@@ -741,6 +775,12 @@ function LastFifteenWords() {
                         )
                     }
                 },
+                label: {
+                    normal: {
+                        show: true,
+                        position: 'top'
+                    }
+                },
                 data: result_amount
             }
         ]
@@ -753,20 +793,41 @@ function LastFifteenWords() {
 function AddToStopWordList() {
     // console.log($('#btn_add_stopword').val());
     eel.AddToStopWordList($('#btn_add_stopword').val());
+    alert($('#btn_add_stopword').val() + '  已被加入停用词列表');
 }
 
 function AddToYysWordList() {
     // console.log($('#btn_addYysWordList').val());
     eel.AddToYYSKeyWordList($('#btn_addYysWordList').val());
+    alert($('#btn_addYysWordList').val() + '  已被加入用户词典');
 }
+
 
 function GoToAnaylize() {
-    filename = $('#file_position')[0].files[0].name;
-    filename ="..\\Anaylize\\" + filename;
+    try {
+        filename = $('#file_position')[0].files[0].name;
+    }catch(error){
+        alert('请选择文件！');
+        return;
+    }
+    filename ='..\\Anaylize\\' + filename;
     console.log(filename);
-    $('#loading-icon').removeClass('hidden');
+    $('#myModalLoading').modal({backdrop: 'static', keyboard: false});
+    $('#myModalLoading').modal('show');
+    $('#StartPage').addClass("hidden");
     $('#StartPage').addClass("hidden");
     eel.Anaylize(filename)(CreateAnaylizeChart);
-    $('#loading-icon').addClass('hidden');
 }
 
+function CheckSecondeWordFromModal(){
+    var second_target = t_word1;
+    $('#myModal').modal('hide');
+    $('#myModal2').modal('hide');
+    eel.SelectKeyWord(second_target, filename)(ListOutSentences);
+    eel.CountRelation(second_target, filename)(GetRelation);
+    $('#myModalLabel').text(second_target + '与其他关键字分词关系分析');
+    $('#btn_add_stopword').attr('value', second_target);
+    $('#btn_addYysWordList').attr('value', second_target);
+    $('#myModal').modal({backdrop: 'static', keyboard: false});
+    $('#myModal').modal('show');
+}
